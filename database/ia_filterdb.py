@@ -28,7 +28,8 @@ async def save_file(media):
     """Save file in database"""
 
     # TODO: Find better way to get same file_id for same media to avoid duplicates
-    file_id = unpack_new_file_id(media.file_id)
+    file_id, file_ref = unpack_new_file_id(media.file_id)
+    #file_id = unpack_new_file_id(media.file_id)
     file_name = re.sub(r"@\w+|(_|\-|\.|\+)", " ", str(media.file_name))
     file_caption = re.sub(r"@\w+|(_|\-|\.|\+)", " ", str(media.caption))
     try:
