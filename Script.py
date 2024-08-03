@@ -9,17 +9,17 @@ class script(object):
 ★ Language: <a href=https://www.python.org>Python</a>
 ★ Library: <a href=https://pyrogram.org>Pyrogram</a>"""
 
-    MY_OWNER_TXT = """★ Name: HA Bots
-★ Username: @HA_Bots
-★ Country: Sri Lanka 🇱🇰"""
+    MY_OWNER_TXT = """★ Name: Infinity Botz
+★ Username: @infinity_botzz"""
 
-    STATUS_TXT = """🗂 Total Files: <code>{}</code>
-👤 Total Users: <code>{}</code>
-👥 Total Chats: <code>{}</code>
-🤑 Premium Users: <code>{}</code>
-✨ Used Storage: <code>{}</code>
-🗳 Free Storage: <code>{}</code>
-🚀 Bot Uptime: <code>{}</code>"""
+    STATUS_TXT = """<b>╭━━━━━━━━━━❰sᴛᴀᴛᴜs ʙᴀʀ❱══❍⊱❁۪۪
+┣⪼𖨠 📁 ᴛᴏᴛᴀʟ ꜰɪʟᴇs: <code>{}</code>
+┣⪼𖨠 👥 ᴛᴏᴛᴀʟ ᴜsᴇʀs: <code>{}</code>
+┣⪼𖨠 🧧 ᴘʀᴇᴍɪᴜᴍ ᴜsᴇʀs: <code>{}<code>
+┣⪼𖨠 ♻️ ᴛᴏᴛᴀʟ ᴄʜᴀᴛs: <code>{}</code>
+┣⪼𖨠 ✨ ᴜsᴇᴅ sᴛᴏʀᴀɢᴇ: <code>{}</code>
+┣⪼𖨠 🆓 ꜰʀᴇᴇ sᴛᴏʀᴀɢᴇ: <code>{}</code>
+╰━━━━━❰ɪɴғɪɴɪᴛʏ ʙᴏᴛᴢ❱━━━══❍⊱❁۪۪</b>"""
 
     NEW_GROUP_TXT = """#NewGroup
 Title - {}
@@ -35,9 +35,10 @@ Total - <code>{}</code>"""
 
 I can't find the <b>{}</b> in my database! 🥲
 
-👉 Google Search and check your spelling is correct.
-👉 Please read the Instructions to get better results.
-👉 Or not been released yet."""
+👉 ꜱᴇᴀʀᴄʜ ᴏɴ ɢᴏᴏɢʟᴇ ᴀɴᴅ ᴄʜᴇᴄᴋ ʏᴏᴜʀ ꜱᴩᴇʟʟɪɴɢ.
+👉 ᴩʟᴇᴀꜱᴇ ʀᴇᴀᴅ ᴛʜᴇ ɪɴꜱᴛʀᴜᴄᴛɪᴏɴꜱ ᴛᴏ ɢᴇᴛ ʙᴇᴛᴛᴇʀ ʀᴇꜱᴜʟᴛꜱ.
+👉 ᴄʜᴇᴄᴋ ᴛʜᴇ ᴍᴏᴠɪᴇ ʀᴇʟᴇᴀꜱᴇ ᴅᴀᴛᴇ.
+👉ʀᴇᴩᴏʀᴛ @mpbotzsupport_bot ɪꜰ ʏᴏᴜ ᴅᴏɴ'ᴛ ꜰɪɴᴅ."""
     
     EARN_TXT = """<b>ʜᴏᴡ ᴛᴏ ᴇᴀʀɴ ꜰʀᴏᴍ ᴛʜɪs ʙᴏᴛ
 
@@ -45,7 +46,7 @@ I can't find the <b>{}</b> in my database! 🥲
 
 » sᴛᴇᴘ 1:- ғɪʀsᴛ ʏᴏᴜ ʜᴀᴠᴇ ᴛᴏ ᴀᴅᴅ ᴛʜɪs ʙᴏᴛ ɪɴ ʏᴏᴜʀ ɢʀᴏᴜᴘ ᴡɪᴛʜ ᴀᴅᴍɪɴ ᴘᴇʀᴍɪssɪᴏɴ.
 
-» sᴛᴇᴘ 2:- ᴍᴀᴋᴇ ᴀᴄᴄᴏᴜɴᴛ ᴏɴ <a href=https://telegram.me/how_to_download_channel/14>mdisklink.link</a> [ ʏᴏᴜ ᴄᴀɴ ᴀʟsᴏ ᴜsᴇ ᴏᴛʜᴇʀ sʜᴏʀᴛɴᴇʀ ᴡᴇʙsɪᴛᴇ ]
+» sᴛᴇᴘ 2:- ᴍᴀᴋᴇ ᴀᴄᴄᴏᴜɴᴛ ᴏɴ <a href=https://tnshort.net/ref/infinitymp>ᴛɴꜱʜᴏʀᴛ.ɴᴇᴛ</a> [ ʏᴏᴜ ᴄᴀɴ ᴀʟsᴏ ᴜsᴇ ᴏᴛʜᴇʀ sʜᴏʀᴛɴᴇʀ ᴡᴇʙsɪᴛᴇ ]
 
 » sᴛᴇᴘ 3:- ᴄʟɪᴄᴋ ᴏɴ ᴛʜᴇ ʙᴇʟᴏᴡ ɢɪᴠᴇɴ ʙᴜᴛᴛᴏɴ ᴛᴏ ᴋɴᴏᴡ ʜᴏᴡ ᴛᴏ ᴄᴏɴɴᴇᴄᴛ ʏᴏᴜʀ sʜᴏʀᴛɴᴇʀ ᴡɪᴛʜ ᴛʜɪs ʙᴏᴛ.
 
@@ -61,12 +62,15 @@ I can't find the <b>{}</b> in my database! 🥲
 
 ➥ ᴇxᴀᴍᴘʟᴇ ↓↓↓
 
-<code>/set_shortlink mdisklink.link 5843c3cc645f5077b2200a2c77e0344879880b3e</code>
+<code>/set_shortlink tnshort.net 9bccb0b14ed6841652fa22d3481907788c1b8838</code>
 
 ➥ ɪꜰ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴄʜᴇᴄᴋ ᴡʜɪᴄʜ sʜᴏʀᴛᴇɴᴇʀ ʏᴏᴜ ʜᴀᴠᴇ ᴄᴏɴɴᴇᴄᴛᴇᴅ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ ᴛʜᴇɴ sᴇɴᴅ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ ᴛᴏ ᴛʜᴇ ɢʀᴏᴜᴘ /get_shortlink
 
 📝 ɴᴏᴛᴇ:- ʏᴏᴜ sʜᴏᴜʟᴅ ɴᴏᴛ ʙᴇ ᴀɴ ᴀɴᴏɴʏᴍᴏᴜs ᴀᴅᴍɪɴ ɪɴ ɢʀᴏᴜᴘ. sᴇɴᴅ ᴄᴏᴍᴍᴀɴᴅ ᴡɪᴛʜᴏᴜᴛ ʙᴇɪɴɢ ᴀɴ ᴀɴᴏɴʏᴍᴜs ᴀᴅᴍɪɴ.</b>"""
 
+
+
+    
     IMDB_TEMPLATE = """✅ I Found: <code>{query}</code>
 
 🏷 Title: <a href={url}>{title}</a>
@@ -107,7 +111,9 @@ I can't find the <b>{}</b> in my database! 🥲
 /chats - to get all groups
 /invite_link - to generate invite link
 /set_pm_search - to do pm search on/off
-/index - to index bot accessible channels</b>"""
+/index - to index bot accessible channels</b>
+/add_premium - to add user in premium
+/remove_premium - to remove user from premium"""
     
     USER_COMMAND_TXT = """<b>Here is bot user commands 👇
 
@@ -121,22 +127,25 @@ I can't find the <b>{}</b> in my database! 🥲
 /set_tutorial - to set custom tutorial link in result page button
 /id - to check group or channel id
 /set_fsub - to set force subscribe channels
-/remove_fsub - to remove all force subscribe channel</b>"""
+/remove_fsub - to remove all force subscribe channel
+/openai - Find solution to any question with ChatGPT
+/my_plan - to check your plan details
+/plans - to get plan details</b>"""
     
-    SOURCE_TXT = """<b>ʙᴏᴛ ɢɪᴛʜᴜʙ ʀᴇᴘᴏsɪᴛᴏʀʏ -
+    SOURCE_TXT = """<b>স্বাগতম 🎉🎊
 
-- ᴛʜɪꜱ ʙᴏᴛ ɪꜱ ᴀɴ ᴏᴘᴇɴ ꜱᴏᴜʀᴄᴇ ᴘʀᴏᴊᴇᴄᴛ.
+- ꜱᴏᴜʀᴄᴇ - <a href=https://t.me/infinity_botzz>ʜᴇʀᴇ</a>
 
-- ꜱᴏᴜʀᴄᴇ - <a href=https://github.com/HA-Bots/Auto-Filter-Bot>ʜᴇʀᴇ</a>
-
-- ᴅᴇᴠʟᴏᴘᴇʀ - @HA_Bots"""
+ᴄᴏɴᴛᴀᴄᴛ ᴛᴏ ᴍᴀᴋᴇ ᴀ ʙᴏᴛ ʟɪᴋᴇ ᴛʜɪꜱ  -
+<a href=https://t.me/infinity_botzz>ɪɴꜰɪɴɪᴛʏ ʙᴏᴛᴢ</a>
+<a href=https://t.me/talk_mrs_bot>ᴍʀ ɪɴꜰɪɴɪᴛʏ</a></b>"""
 
     PREMIUM_PLAN_TEXT = """<b><i><u>- ᴀᴠᴀɪʟᴀʙʟᴇ ᴘʟᴀɴs - </u>
 
-- 30ʀs - 1 ᴡᴇᴇᴋ
-- 50ʀs - 1 ᴍᴏɴᴛʜs
-- 120ʀs - 3 ᴍᴏɴᴛʜs
-- 220ʀs - 6 ᴍᴏɴᴛʜs
+- 1 ᴡᴇᴇᴋ - 10ʀs 
+- 1 ᴍᴏɴᴛʜs - 40ʀs
+- 3 ᴍᴏɴᴛʜs - 100ʀs (19% ᴏғғ)
+- 6 ᴍᴏɴᴛʜs - 210ʀs (42% ᴏғғ)
 
 <u>🎁 ᴘʀᴇᴍɪᴜᴍ ғᴇᴀᴛᴜʀᴇs 🎁</u>
 
