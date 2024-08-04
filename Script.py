@@ -129,7 +129,7 @@ I can't find the <b>{}</b> in my database! 🥲
 /set_fsub - to set force subscribe channels
 /remove_fsub - to remove all force subscribe channel
 /openai - Find solution to any question with ChatGPT
-/my_plan - to check your plan details
+/myplan - to check your plan details
 /plans - to get plan details</b>"""
     
     SOURCE_TXT = """<b>স্বাগতম 🎉🎊
