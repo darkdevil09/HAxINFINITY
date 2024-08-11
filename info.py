@@ -119,7 +119,7 @@ if len(BIN_CHANNEL) == 0:
     exit()
 else:
     BIN_CHANNEL = int(BIN_CHANNEL)
-URL = environ.get("URL", "https://infinity-movies-bot-07.onrender.com/")
+URL = environ.get("URL", "https://eventual-catlaina-infinity-movies-bot-mp-b67bd5a1.koyeb.app/") #https://infinity-movies-bot-07.onrender.com/
 if len(URL) == 0:
     print('Error - URL is missing, exiting now')
     exit()
