@@ -96,6 +96,9 @@ async def get_search_results(query, max_results=MAX_BTN, offset=0, lang=None):
         next_offset = ''       
     return files, next_offset, total_results
     
+def encode_file_ref(file_ref: bytes) -> str:
+    return base64.urlsafe_b64encode(file_ref).decode().rstrip("=")
+
 async def delete_files(query):
     query = query.strip()
     if not query:
