@@ -74,6 +74,9 @@ async def get_search_results(query, max_results=MAX_BTN, offset=0, lang=None):
     filter = {'file_name': regex}
     cursor = Media.find(filter)
 
+    if file_type:
+        filter['file_type'] = file_type
+
     # Sort by recent
     cursor.sort('$natural', -1)
 
