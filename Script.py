@@ -5,7 +5,7 @@ class script(object):
 <blockquote>ɪ ᴀᴍ ᴘᴏᴡᴇʀғᴜʟ ᴀᴜᴛᴏ ғɪʟᴛᴇʀ ᴡɪᴛʜ ʟɪɴᴋ sʜᴏʀᴛᴇɴᴇʀ ʙᴏᴛ. ʏᴏᴜ ᴄᴀɴ ᴜꜱᴇ ᴀꜱ ᴀᴜᴛᴏ ғɪʟᴛᴇʀ ᴡɪᴛʜ ʟɪɴᴋ sʜᴏʀᴛᴇɴᴇʀ ɪɴ ʏᴏᴜʀ ɢʀᴏᴜᴘ... ɪᴛ'ꜱ ᴇᴀꜱʏ ᴛᴏ ᴜꜱᴇ ᴊᴜsᴛ ᴀᴅᴅ ᴍᴇ ᴀꜱ ᴀᴅᴍɪɴ ɪɴ ʏᴏᴜʀ ɢʀᴏᴜᴘ ɪ ᴡɪʟʟ ᴘʀᴏᴠɪᴅᴇ ᴛʜᴇʀᴇ ᴍᴏᴠɪᴇꜱ ᴡɪᴛʜ ʏᴏᴜʀ ʟɪɴᴋ ꜱʜᴏʀᴛᴇɴᴇʀ... ♻️</blockquote></b>"""
 
     MY_ABOUT_TXT = """<b>╭━━━━━━━━━━❰ᴍʏ ᴀʙᴏᴜᴛ❱══❍⊱❁۪۪
-│▸ ɴᴀᴍᴇ : <a href=https://t.me/infinity_botzz/205>ᴘʀᴏ ғɪʟᴛᴇʀ ʙᴏᴛ</a>
+│▸ ɴᴀᴍᴇ : <a href=https://t.me/infinity_botzz/205>ɪɴғɪɴɪᴛʏ ғɪʟᴛᴇʀ ʙᴏᴛ</a>
 │▸ sᴇʀᴠᴇʀ : <a href=https://www.heroku.com>ᴋᴏʏᴇʙ</a>
 │▸ ᴅᴀᴛᴀʙᴀsᴇ : <a href=https://www.mongodb.com>ᴍᴏɴɢᴏ ᴅʙ</a>
 │▸ ʟᴀɴɢᴜᴀɢᴇ : <a href=https://www.python.org>ᴘʏᴛʜᴏɴ</a>
