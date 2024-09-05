@@ -4,22 +4,33 @@ class script(object):
     
 <blockquote>ɪ ᴀᴍ ᴘᴏᴡᴇʀғᴜʟ ᴀᴜᴛᴏ ғɪʟᴛᴇʀ ᴡɪᴛʜ ʟɪɴᴋ sʜᴏʀᴛᴇɴᴇʀ ʙᴏᴛ. ʏᴏᴜ ᴄᴀɴ ᴜꜱᴇ ᴀꜱ ᴀᴜᴛᴏ ғɪʟᴛᴇʀ ᴡɪᴛʜ ʟɪɴᴋ sʜᴏʀᴛᴇɴᴇʀ ɪɴ ʏᴏᴜʀ ɢʀᴏᴜᴘ... ɪᴛ'ꜱ ᴇᴀꜱʏ ᴛᴏ ᴜꜱᴇ ᴊᴜsᴛ ᴀᴅᴅ ᴍᴇ ᴀꜱ ᴀᴅᴍɪɴ ɪɴ ʏᴏᴜʀ ɢʀᴏᴜᴘ ɪ ᴡɪʟʟ ᴘʀᴏᴠɪᴅᴇ ᴛʜᴇʀᴇ ᴍᴏᴠɪᴇꜱ ᴡɪᴛʜ ʏᴏᴜʀ ʟɪɴᴋ ꜱʜᴏʀᴛᴇɴᴇʀ... ♻️</blockquote></b>"""
 
-    MY_ABOUT_TXT = """★ Server: <a href=https://www.heroku.com>Heroku</a>
-★ Database: <a href=https://www.mongodb.com>MongoDB</a>
-★ Language: <a href=https://www.python.org>Python</a>
-★ Library: <a href=https://pyrogram.org>Pyrogram</a>"""
+    MY_ABOUT_TXT = """<b>╭━━━━━━━━━━❰ᴍʏ ᴀʙᴏᴜᴛ❱══❍⊱❁۪۪
+│▸ ɴᴀᴍᴇ : <a href=https://t.me/infinity_botzz/205>ᴘʀᴏ ғɪʟᴛᴇʀ ʙᴏᴛ</a>
+│▸ sᴇʀᴠᴇʀ : <a href=https://www.heroku.com>ᴋᴏʏᴇʙ</a>
+│▸ ᴅᴀᴛᴀʙᴀsᴇ : <a href=https://www.mongodb.com>ᴍᴏɴɢᴏ ᴅʙ</a>
+│▸ ʟᴀɴɢᴜᴀɢᴇ : <a href=https://www.python.org>ᴘʏᴛʜᴏɴ</a>
+│▸ ʟɪʙʀᴀʀʏ : <a href=https://pyrogram.org>ᴘʏʀᴏɢʀᴀᴍ</a>
+│▸ ᴠᴇʀsɪᴏɴ : ᴠ.2.5.1
+╰━━━━━❰<a href=https://t.me/infinity_botzz>ɪɴғɪɴɪᴛʏ ʙᴏᴛᴢ</a>❱━━━══❍⊱❁۪۪</b>"""
 
-    MY_OWNER_TXT = """★ Name: Infinity Botz
-★ Username: @infinity_botzz"""
+    MY_OWNER_TXT = """<b>╭━━━━━❰ᴍʏ ᴏᴡɴᴇʀ ᴅᴇᴀᴛɪʟs❱══❍⊱❁۪۪
+│▸ ɴᴀᴍᴇ : <a href=https://t.me/about_infinity01>ᴍʀ. ɪɴғɪɴɪᴛʏ</a>
+│▸ ᴜᴘᴅᴀᴛᴇs ᴄʜᴀɴɴᴇʟ : <a href=https://t.me/infinity_botzz>ɪɴғɪɴɪᴛʏ ʙᴏᴛᴢ</a>
+│▸ sᴘᴏɴsᴏʀᴅ ʙʏ : <a href=https://t.me/hd_movies_hub01/7>ʜᴅ ᴍᴏᴠɪᴇs ʜᴜʙ</a>
+│▸ ᴄᴏ-sᴘᴏɴsᴏʀᴅ ʙʏ : <a href=https://t.me/infinitymoviefiles>ɪɴғɪɴɪᴛʏ ᴍᴏᴠɪᴇs</a>
+│▸ ᴄᴏᴘʏʀɪɢʜᴛ ᴅɪsᴄʟᴀɪᴍᴇʀ : <a href=https://t.me/hd_movies_hub01/6>ʀᴇᴀᴅ ʜᴇʀᴇ</a>
+│▸ ᴄᴏɴᴛᴀᴄᴛ : <a href=telegram.me/talk_mrs_bot>ᴍʀ. ɪɴғɪɴɪᴛʏ</a>
+╰━━━━━❰<a href=https://t.me/infinity_botzz>ɪɴғɪɴɪᴛʏ ʙᴏᴛᴢ</a>❱━━━══❍⊱❁۪۪</b>"""
 
-    STATUS_TXT = """<b>╭━━━━━━━━━━❰sᴛᴀᴛᴜs ʙᴀʀ❱══❍⊱❁۪۪
+
+    STATUS_TXT = """<b><pre> ╭━━━━━━━━━━❰sᴛᴀᴛᴜs ʙᴀʀ❱══❍⊱❁۪۪
 ┣⪼𖨠 📁 ᴛᴏᴛᴀʟ ꜰɪʟᴇs: <code>{}</code>
 ┣⪼𖨠 👥 ᴛᴏᴛᴀʟ ᴜsᴇʀs: <code>{}</code>
 ┣⪼𖨠 🧧 ᴘʀᴇᴍɪᴜᴍ ᴜsᴇʀs: <code>{}<code>
 ┣⪼𖨠 ♻️ ᴛᴏᴛᴀʟ ᴄʜᴀᴛs: <code>{}</code>
 ┣⪼𖨠 ✨ ᴜsᴇᴅ sᴛᴏʀᴀɢᴇ: <code>{}</code>
 ┣⪼𖨠 🆓 ꜰʀᴇᴇ sᴛᴏʀᴀɢᴇ: <code>{}</code>
-╰━━━━━❰ɪɴғɪɴɪᴛʏ ʙᴏᴛᴢ❱━━━══❍⊱❁۪۪</b>"""
+╰━━━━━❰ɪɴғɪɴɪᴛʏ ʙᴏᴛᴢ❱━━━══❍⊱❁۪۪</pre></b>"""
 
     NEW_GROUP_TXT = """#NewGroup
 Title - {}
