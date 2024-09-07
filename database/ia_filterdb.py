@@ -19,9 +19,9 @@ class Media(Document):
     file_ref = fields.StrField(allow_none=True)
     file_name = fields.StrField(required=True)
     file_size = fields.IntField(required=True)
-    file_type = fields.StrField(required=True)
     mime_type = fields.StrField(allow_none=True)
     caption = fields.StrField(allow_none=True)
+    file_type = fields.StrField(allow_none=True)
 
     class Meta:
         indexes = ('$file_name', )
@@ -57,7 +57,7 @@ async def save_file(media):
             print(f'Saved - {file_name}')
             return 'suc'
 
-async def get_search_results(query, max_results=MAX_BTN, offset=0, lang=None):
+async def get_search_results(query, file_type=None, max_results=MAX_BTN, offset=0, lang=None):
     query = str(query) # to ensure the query is string to stripe.
     query = query.strip()
     if not query:
