@@ -40,7 +40,7 @@ async def save_file(media):
             file_id=file_id,
             file_name=file_name,
             file_ref=file_ref,
-            file_size=file_size,
+            file_size=media.file_size,
             file_type=file_type,
             mime_type=mime_type
         )
