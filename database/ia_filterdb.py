@@ -18,7 +18,6 @@ class Media(Document):
     file_id = fields.StrField(attribute='_id')
     file_name = fields.StrField(required=True)
     file_size = fields.IntField(required=True)
-    caption = fields.StrField(allow_none=True)
 
     class Meta:
         indexes = ('$file_name', )
@@ -35,8 +34,7 @@ async def save_file(media):
         file = Media(
             file_id=file_id,
             file_name=file_name,
-            file_size=media.file_size,
-            caption=file_caption
+            file_size=media.file_size
         )
     except ValidationError:
         print(f'Saving Error - {file_name}')
