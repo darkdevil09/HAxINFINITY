@@ -145,11 +145,11 @@ async def start(client, message):
             f_caption = CAPTION.format(
                 file_name=file.file_name,
                 file_size=get_size(file.file_size),
-                file_caption=file.caption
+                #file_caption=file.caption
             )      
             if settings.get('is_stream', IS_STREAM):
                 btn = [[
-                    InlineKeyboardButton("✛ ᴡᴀᴛᴄʜ & ᴅᴏᴡɴʟᴏᴀᴅ ✛", callback_data=f"stream#{file.file_id}")
+                    InlineKeyboardButton(🚀 ᴡᴀᴛᴄʜ ᴏɴʟɪɴᴇ / ᴅᴏᴡɴʟᴏᴀᴅ 🚀, callback_data=f"stream#{file.file_id}")
                 ],[
                     InlineKeyboardButton('⚡️ ᴜᴘᴅᴀᴛᴇs', url=UPDATES_LINK),
                     InlineKeyboardButton('💡 ꜱᴜᴘᴘᴏʀᴛ', url=SUPPORT_LINK)
@@ -205,11 +205,11 @@ async def start(client, message):
     f_caption = CAPTION.format(
         file_name = files.file_name,
         file_size = get_size(files.file_size),
-        file_caption=files.caption
+        #file_caption=files.caption
     )
     if settings.get('is_stream', IS_STREAM):
         btn = [[
-            InlineKeyboardButton("✛ ᴡᴀᴛᴄʜ & ᴅᴏᴡɴʟᴏᴀᴅ ✛", callback_data=f"stream#{file_id}")
+            InlineKeyboardButton(🚀 ᴡᴀᴛᴄʜ ᴏɴʟɪɴᴇ / ᴅᴏᴡɴʟᴏᴀᴅ 🚀, callback_data=f"stream#{file_id}")
         ],[
             InlineKeyboardButton('⚡️ ᴜᴘᴅᴀᴛᴇs', url=UPDATES_LINK),
             InlineKeyboardButton('💡 ꜱᴜᴘᴘᴏʀᴛ', url=SUPPORT_LINK)
@@ -270,7 +270,7 @@ async def stats(bot, message):
     u_size_int = await db.get_db_size()
     f_size = get_size(536870912 - u_size_int)
     uptime = get_readable_time(time_now() - temp.START_TIME)
-    await message.reply_text(script.STATUS_TXT.format(files, users, chats, premium, u_size, f_size, uptime))    
+    await message.reply_text(script.STATUS_TXT.format(files, users, premium, chats, u_size, f_size, uptime))    
     
 @Client.on_message(filters.command('settings'))
 async def settings(client, message):
@@ -648,4 +648,3 @@ async def remove_fsub(client, message):
         return
     await save_group_settings(grp_id, 'fsub', None)
     await message.reply_text("<b>Successfully removed your force channel id...</b>")
-
