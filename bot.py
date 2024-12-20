@@ -3,7 +3,7 @@ from database.ia_filterdb import Media
 from aiohttp import web
 from database.users_chats_db import db
 from web import web_app
-from info import LOG_CHANNEL, API_ID, API_HASH, BOT_TOKEN, PORT, BIN_CHANNEL, ADMINS, DATABASE_URL
+from info import LOG_CHANNEL, API_ID, API_HASH, BOT_TOKEN, PORT, BIN_CHANNEL, ADMINS, DATABASE_URL, SUPPORT_GROUP
 from utils import temp, get_readable_time, save_group_settings
 from typing import Union, Optional, AsyncGenerator
 from pyrogram import types
@@ -35,7 +35,7 @@ class Bot(Client):
             client.admin.command('ping')
             print("Pinged your deployment. You successfully connected to MongoDB!")
         except Exception as e:
-            print("Something Went Wrong While Connecting To Database!", e)
+            print(f"Something Went Wrong While Connecting To Database!", {e})
             exit()
         await super().start()
         if os.path.exists('restart.txt'):
@@ -52,6 +52,7 @@ class Bot(Client):
         temp.ME = me.id
         temp.U_NAME = me.username
         temp.B_NAME = me.first_name
+        temp.U_LINK = me.mention
         username = '@' + me.username
         print(f"{me.first_name} is started now 🤗")
         #groups = await db.get_all_chats_count()
@@ -73,6 +74,11 @@ class Bot(Client):
             exit()
         for admin in ADMINS:
             await self.send_message(chat_id=admin, text=f"<b>✅ ʙᴏᴛ ʀᴇsᴛᴀʀᴛᴇᴅ</b>")
+        try:
+            await self.send_message(chat_id=SUPPORT_GROUP, text=f"{me.mention}  ʀᴇsᴛᴀʀᴛᴇᴅ ✅")
+        except:
+            print("Unable to send message in support group")
+            exit()
 
     async def stop(self, *args):
         await super().stop()
@@ -115,10 +121,10 @@ class Bot(Client):
 app = Bot()
 try:
     app.run()
-except FloodWait as vp:
-    time = get_readable_time(vp.value)
+except FloodWait as mp:
+    time = get_readable_time(mp.value)
     print(f"Flood Wait Occured, Sleeping For {time}")
-    asyncio.sleep(vp.value)
+    asyncio.sleep(mp.value)
     print("Now Ready For Deploying !")
     app.run()
 

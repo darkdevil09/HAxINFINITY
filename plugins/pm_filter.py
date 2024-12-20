@@ -1067,6 +1067,8 @@ async def advantage_spell_chok(message, s):
     btn = [[
         InlineKeyboardButton("⚠️ Instructions ⚠️", callback_data='instructions'),
         InlineKeyboardButton("🔎 Search Google 🔍", url=f"https://www.google.com/search?q={google_search}")
+    ],[
+        InlineKeyboardButton("Request to bo admin", url="https/t.me/mpbotzsupport_bot")
     ]]
     try:
         movies = await get_poster(search, bulk=True)

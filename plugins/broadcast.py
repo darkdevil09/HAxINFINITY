@@ -49,7 +49,7 @@ async def users_broadcast(bot, message):
             elif sts == 'Error':
                 failed += 1
             done += 1
-            if not done % 20:
+            if not done % 80:
                 btn = [[
                     InlineKeyboardButton('CANCEL', callback_data=f'broadcast_cancel#users')
                 ]]
@@ -93,5 +93,3 @@ async def groups_broadcast(bot, message):
                 ]]
                 await b_sts.edit(f"Groups groadcast in progress...\n\nTotal Groups: <code>{total_chats}</code>\nCompleted: <code>{done} / {total_chats}</code>\nSuccess: <code>{success}</code>\nFailed: <code>{failed}</code>", reply_markup=InlineKeyboardMarkup(btn))    
         await b_sts.edit(f"Groups broadcast completed.\nCompleted in {time_taken}\n\nTotal Groups: <code>{total_chats}</code>\nCompleted: <code>{done} / {total_chats}</code>\nSuccess: <code>{success}</code>\nFailed: <code>{failed}</code>")
-
-

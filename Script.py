@@ -23,14 +23,14 @@ class script(object):
 ╰━━━━━❰<a href=https://t.me/infinity_botzz>ɪɴғɪɴɪᴛʏ ʙᴏᴛᴢ</a>❱━━━══❍⊱❁۪۪</b>"""
 
 
-    STATUS_TXT = """<b><pre> ╭━━━━━━━━━━❰sᴛᴀᴛᴜs ʙᴀʀ❱══❍⊱❁۪۪
+    STATUS_TXT = """<b><blockquote> ╭━━━━━━━━━━❰sᴛᴀᴛᴜs ʙᴀʀ❱══❍⊱❁۪۪
 ┣⪼𖨠 📁 ᴛᴏᴛᴀʟ ꜰɪʟᴇs: <code>{}</code>
 ┣⪼𖨠 👥 ᴛᴏᴛᴀʟ ᴜsᴇʀs: <code>{}</code>
 ┣⪼𖨠 🧧 ᴘʀᴇᴍɪᴜᴍ ᴜsᴇʀs: <code>{}<code>
 ┣⪼𖨠 ♻️ ᴛᴏᴛᴀʟ ᴄʜᴀᴛs: <code>{}</code>
 ┣⪼𖨠 ✨ ᴜsᴇᴅ sᴛᴏʀᴀɢᴇ: <code>{}</code>
 ┣⪼𖨠 🆓 ꜰʀᴇᴇ sᴛᴏʀᴀɢᴇ: <code>{}</code>
-╰━━━━━━━━❰ɪɴғɪɴɪᴛʏ ʙᴏᴛᴢ❱━━━══❍⊱❁۪۪</pre></b>"""
+╰━━━━━━━━❰ɪɴғɪɴɪᴛʏ ʙᴏᴛᴢ❱━━━══❍⊱❁۪۪</blockquote></b>"""
 
     NEW_GROUP_TXT = """#NewGroup
 Title - {}
@@ -167,5 +167,3 @@ I can't find the <b>{}</b> in my database! 🥲
 💢 ᴍᴜsᴛ sᴇɴᴅ sᴄʀᴇᴇɴsʜᴏᴛ ᴀғᴛᴇʀ ᴘᴀʏᴍᴇɴᴛ
 
 ‼️ ᴀғᴛᴇʀ sᴇɴᴅɪɴɢ ᴀ sᴄʀᴇᴇɴsʜᴏᴛ ᴘʟᴇᴀsᴇ ɢɪᴠᴇ ᴜs sᴏᴍᴇ ᴛɪᴍᴇ ᴛᴏ ᴀᴅᴅ ʏᴏᴜ ɪɴ ᴛʜᴇ ᴘʀᴇᴍɪᴜᴍ ʟɪsᴛ</i></b>"""
-
-
