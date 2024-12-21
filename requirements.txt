@@ -1,6 +1,5 @@
 pyrofork==2.3.43
 https://codeload.github.com/KurimuzonAkuma/pyrogram/zip/refs/heads/dev
-git+https://github.com/vpcreatz/pyrofork-adv
 tgcrypto
 motor
 marshmallow
