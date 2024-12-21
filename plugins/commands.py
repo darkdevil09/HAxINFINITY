@@ -4,7 +4,6 @@ import json
 import base64
 import sys
 from shortzy import Shortzy
-from telegraph import upload_file
 import random, string
 import asyncio
 from time import time as time_now
