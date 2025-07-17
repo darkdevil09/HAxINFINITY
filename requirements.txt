@@ -11,4 +11,4 @@ aiohttp
 aiofiles
 speedtest-cli
 requests
-dnspython<3.0.0
+dnspython
