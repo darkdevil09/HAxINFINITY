@@ -11,3 +11,4 @@ aiohttp
 aiofiles
 speedtest-cli
 requests
+dnspython==2.3.0
