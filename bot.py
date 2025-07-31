@@ -78,7 +78,7 @@ class Bot(Client):
             await self.send_message(chat_id=SUPPORT_GROUP, text=f"{me.mention}  ʀᴇsᴛᴀʀᴛᴇᴅ ✅")
         except:
             print("Unable to send message in support group/admins")
-            exit()
+            pass
 
     async def stop(self, *args):
         await super().stop()
