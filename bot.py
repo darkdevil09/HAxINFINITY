@@ -72,12 +72,12 @@ class Bot(Client):
         except:
             print("Error - Make sure bot admin in BIN_CHANNEL, exiting now")
             exit()
-        for admin in ADMINS:
-            await self.send_message(chat_id=admin, text=f"<b>✅ ʙᴏᴛ ʀᴇsᴛᴀʀᴛᴇᴅ</b>")
         try:
+            for admin in ADMINS:
+                await self.send_message(chat_id=admin, text=f"<b>✅ ʙᴏᴛ ʀᴇsᴛᴀʀᴛᴇᴅ</b>")
             await self.send_message(chat_id=SUPPORT_GROUP, text=f"{me.mention}  ʀᴇsᴛᴀʀᴛᴇᴅ ✅")
         except:
-            print("Unable to send message in support group")
+            print("Unable to send message in support group/admins")
             exit()
 
     async def stop(self, *args):
