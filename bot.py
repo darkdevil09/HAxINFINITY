@@ -21,7 +21,7 @@ class Bot(Client):
             api_hash=API_HASH,
             bot_token=BOT_TOKEN,
             plugins={"root": "plugins"},
-            workers=200,
+            workers=2000,
             sleep_threshold=20
         )
 
