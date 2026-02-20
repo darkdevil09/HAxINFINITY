@@ -23,24 +23,28 @@ class script(object):
 ╰━━━━━❰<a href=https://t.me/infinity_botzz>ɪɴғɪɴɪᴛʏ ʙᴏᴛᴢ</a>❱━━━══❍⊱❁۪۪</b>"""
 
 
-    STATUS_TXT = """<b><blockquote> ╭━━━━━━━━━━❰sᴛᴀᴛᴜs ʙᴀʀ❱══❍⊱❁۪۪
+    STATUS_TXT = """<b>╭━━❰sᴛᴀᴛᴜs ʙᴀʀ❱══❍⊱❁۪۪
 ┣⪼𖨠 📁 ᴛᴏᴛᴀʟ ꜰɪʟᴇs: <code>{}</code>
 ┣⪼𖨠 👥 ᴛᴏᴛᴀʟ ᴜsᴇʀs: <code>{}</code>
 ┣⪼𖨠 🧧 ᴘʀᴇᴍɪᴜᴍ ᴜsᴇʀs: <code>{}<code>
 ┣⪼𖨠 ♻️ ᴛᴏᴛᴀʟ ᴄʜᴀᴛs: <code>{}</code>
 ┣⪼𖨠 ✨ ᴜsᴇᴅ sᴛᴏʀᴀɢᴇ: <code>{}</code>
 ┣⪼𖨠 🆓 ꜰʀᴇᴇ sᴛᴏʀᴀɢᴇ: <code>{}</code>
-╰━━━━━━━━❰ɪɴғɪɴɪᴛʏ ʙᴏᴛᴢ❱━━━══❍⊱❁۪۪</blockquote></b>"""
+╰━━━━━━━❰ɪɴғɪɴɪᴛʏ ʙᴏᴛᴢ❱━━━══❍⊱❁۪۪</b>"""
 
-    NEW_GROUP_TXT = """#NewGroup
-Title - {}
-ID - <code>{}</code>
-Username - {}
-Total - <code>{}</code>"""
+    NEW_GROUP_TXT = """<b>#ɴᴇᴡɢʀᴏᴜᴘ</b>
+<b>━━━━━━━━━━━━━━━━━━</b>
+<b>ᴛɪᴛʟᴇ</b> - {}
+<b>ɪᴅ</b> - <code>{}</code>
+<b>ᴜsᴇʀɴᴀᴍᴇ</b> - {}
+<b>ᴛᴏᴛᴀʟ</b> - <code>{}</code>
+<b>━━━━━━━━━━━━━━━━━━</b>"""
 
-    NEW_USER_TXT = """#NewUser
-★ Name: {}
-★ ID: <code>{}</code>"""
+    NEW_USER_TXT = """<b>#ɴᴇᴡᴜsᴇʀ</b>
+<b>━━━━━━━━━━━━━━━━━━</b>
+★ <b>ɴᴀᴍᴇ</b>: {}
+★ <b>ɪᴅ</b>: <code>{}</code>
+<b>━━━━━━━━━━━━━━━━━━</b>"""
 
     NOT_FILE_TXT = """👋 Hello {},
 
@@ -57,7 +61,7 @@ I can't find the <b>{}</b> in my database! 🥲
 
 » sᴛᴇᴘ 1:- ғɪʀsᴛ ʏᴏᴜ ʜᴀᴠᴇ ᴛᴏ ᴀᴅᴅ ᴛʜɪs ʙᴏᴛ ɪɴ ʏᴏᴜʀ ɢʀᴏᴜᴘ ᴡɪᴛʜ ᴀᴅᴍɪɴ ᴘᴇʀᴍɪssɪᴏɴ.
 
-» sᴛᴇᴘ 2:- ᴍᴀᴋᴇ ᴀᴄᴄᴏᴜɴᴛ ᴏɴ <a href=https://tnshort.net/ref/infinitymp>ᴛɴꜱʜᴏʀᴛ.ɴᴇᴛ</a> [ ʏᴏᴜ ᴄᴀɴ ᴀʟsᴏ ᴜsᴇ ᴏᴛʜᴇʀ sʜᴏʀᴛɴᴇʀ ᴡᴇʙsɪᴛᴇ ]
+» sᴛᴇᴘ 2:- ᴍᴀᴋᴇ ᴀᴄᴄᴏᴜɴᴛ ᴏɴ <a href=https://telegram.me/infinity_botz/207>ɪɴꜱʜᴏʀᴛ</a> [ ʏᴏᴜ ᴄᴀɴ ᴀʟsᴏ ᴜsᴇ ᴏᴛʜᴇʀ sʜᴏʀᴛɴᴇʀ ᴡᴇʙsɪᴛᴇ ]
 
 » sᴛᴇᴘ 3:- ᴄʟɪᴄᴋ ᴏɴ ᴛʜᴇ ʙᴇʟᴏᴡ ɢɪᴠᴇɴ ʙᴜᴛᴛᴏɴ ᴛᴏ ᴋɴᴏᴡ ʜᴏᴡ ᴛᴏ ᴄᴏɴɴᴇᴄᴛ ʏᴏᴜʀ sʜᴏʀᴛɴᴇʀ ᴡɪᴛʜ ᴛʜɪs ʙᴏᴛ.
 
@@ -73,7 +77,7 @@ I can't find the <b>{}</b> in my database! 🥲
 
 ➥ ᴇxᴀᴍᴘʟᴇ ↓↓↓
 
-<code>/set_shortlink tnshort.net 9bccb0b14ed6841652fa22d3481907788c1b8838</code>
+<code>/set_shortlink inshort.com9bccb0b14ed6841652fa22d3481907788c1b8838</code>
 
 ➥ ɪꜰ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴄʜᴇᴄᴋ ᴡʜɪᴄʜ sʜᴏʀᴛᴇɴᴇʀ ʏᴏᴜ ʜᴀᴠᴇ ᴄᴏɴɴᴇᴄᴛᴇᴅ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ ᴛʜᴇɴ sᴇɴᴅ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ ᴛᴏ ᴛʜᴇ ɢʀᴏᴜᴘ /get_shortlink
 
@@ -102,45 +106,59 @@ I can't find the <b>{}</b> in my database! 🥲
 
     HELP_TXT = """<b>Note - <spoiler>Try each command without any argument to see more details 😹</spoiler></b>"""
     
-    ADMIN_COMMAND_TXT = """<b>Here is bot admin commands 👇
+    ADMIN_COMMAND_TXT = """<b>ᴀᴅᴍɪɴ ᴘᴀɴᴇʟ</b>
+<b>━━━━━━━━━━━━━━━━━━</b>
+<b>ʜᴇʀᴇ ɪs ʙᴏᴛ ᴀᴅᴍɪɴ ᴄᴏᴍᴍᴀɴᴅs 👇</b>
 
-/index_channels - to check how many index channel id added
-/stats - to get bot status
-/delete - to delete files using query
-/delete_all - to delete all indexed file
-/broadcast - to send message to all bot users
-/grp_broadcast - to send message to all groups
-/pin_broadcast - to send message as pin to all bot users.
-/pin_grp_broadcast - to send message as pin to all groups.
-/restart - to restart bot
-/leave - to leave your bot from particular group
-/unban_grp - to enable group
-/ban_grp - to disable group
-/ban_user - to ban a users from bot
-/unban_user - to unban a users from bot
-/users - to get all users details
-/chats - to get all groups
-/invite_link - to generate invite link
-/set_pm_search - to do pm search on/off
-/index - to index bot accessible channels</b>
-/add_premium - to add user in premium
-/remove_premium - to remove user from premium"""
+<b>📢 ʙʀᴏᴀᴅᴄᴀsᴛ ᴍᴇɴᴜ</b>
+/broadcast - ᴛᴏ sᴇɴᴅ ᴍᴇssᴀɢᴇ ᴛᴏ ᴀʟʟ ʙᴏᴛ ᴜsᴇʀs
+/grp_broadcast - ᴛᴏ sᴇɴᴅ ᴍᴇssᴀɢᴇ ᴛᴏ ᴀʟʟ ɢʀᴏᴜᴘs
+/pin_broadcast - ᴛᴏ sᴇɴᴅ ᴍᴇssᴀɢᴇ ᴀs ᴘɪɴ ᴛᴏ ᴀʟʟ ʙᴏᴛ ᴜsᴇʀs
+/pin_grp_broadcast - ᴛᴏ sᴇɴᴅ ᴍᴇssᴀɢᴇ ᴀs ᴘɪɴ ᴛᴏ ᴀʟʟ ɢʀᴏᴜᴘs
+
+<b>🛡️ ᴜsᴇʀ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ</b>
+/ban_user - ᴛᴏ ʙᴀɴ ᴀ ᴜsᴇʀs ꜰʀᴏᴍ ʙᴏᴛ
+/unban_user - ᴛᴏ ᴜɴʙᴀɴ ᴀ ᴜsᴇʀs ꜰʀᴏᴍ ʙᴏᴛ
+/ban_grp - ᴛᴏ ᴅɪsᴀʙʟᴇ ɢʀᴏᴜᴘ
+/unban_grp - ᴛᴏ ᴇɴᴀʙʟᴇ ɢʀᴏᴜᴘ
+/users - ᴛᴏ ɢᴇᴛ ᴀʟʟ ᴜsᴇʀs ᴅᴇᴛᴀɪʟs
+/chats - ᴛᴏ ɢᴇᴛ ᴀʟʟ ɢʀᴏᴜᴘs
+/add_premium - ᴛᴏ ᴀᴅᴅ ᴜsᴇʀ ɪɴ ᴘʀᴇᴍɪᴜᴍ
+/remove_premium - ᴛᴏ ʀᴇᴍᴏᴠᴇ ᴜsᴇʀ ꜰʀᴏᴍ ᴘʀᴇᴍɪᴜᴍ
+
+<b>⚙️ ʙᴏᴛ & ɪɴᴅᴇx sᴇᴛᴛɪɴɢs</b>
+/index - ᴛᴏ ɪɴᴅᴇx ʙᴏᴛ ᴀᴄᴄᴇssɪʙʟᴇ ᴄʜᴀɴɴᴇʟs
+/index_channels - ᴛᴏ ᴄʜᴇᴄᴋ ʜᴏᴡ ᴍᴀɴʏ ɪɴᴅᴇx ᴄʜᴀɴɴᴇʟ ɪᴅ ᴀᴅᴅᴇᴅ
+/stats - ᴛᴏ ɢᴇᴛ ʙᴏᴛ sᴛᴀᴛᴜs
+/delete - ᴛᴏ ᴅᴇʟᴇᴛᴇ ꜰɪʟᴇs ᴜsɪɴɢ ǫᴜᴇʀʏ
+/delete_all - ᴛᴏ ᴅᴇʟᴇᴛᴇ ᴀʟʟ ɪɴᴅᴇxᴇᴅ ꜰɪʟᴇ
+/restart - ᴛᴏ ʀᴇsᴛᴀʀᴛ ʙᴏᴛ
+/leave - ᴛᴏ ʟᴇᴀᴠᴇ ʏᴏᴜʀ ʙᴏᴛ ꜰʀᴏᴍ ᴘᴀʀᴛɪᴄᴜʟᴀʀ ɢʀᴏᴜᴘ
+/invite_link - ᴛᴏ ɢᴇɴᴇʀᴀᴛᴇ ɪɴᴠɪᴛᴇ ʟɪɴᴋ
+/set_pm_search - ᴛᴏ ᴅᴏ ᴘᴍ sᴇᴀʀᴄʜ ᴏɴ/ᴏꜰꜰ
+<b>━━━━━━━━━━━━━━━━━━</b>"""
+
+    USER_COMMAND_TXT = """<b>ᴜsᴇʀ ᴄᴏᴍᴍᴀɴᴅs</b>
+<b>━━━━━━━━━━━━━━━━━━</b>
+<b>ʜᴇʀᴇ ɪs ʙᴏᴛ ᴜsᴇʀ ᴄᴏᴍᴍᴀɴᴅs 👇</b>
+
+/start - ᴛᴏ ᴄʜᴇᴄᴋ ʙᴏᴛ ᴀʟɪᴠᴇ ᴏʀ ɴᴏᴛ
+/id - ᴛᴏ ᴄʜᴇᴄᴋ ɢʀᴏᴜᴘ ᴏʀ ᴄʜᴀɴɴᴇʟ ɪᴅ
+/openai - ꜰɪɴᴅ sᴏʟᴜᴛɪᴏɴ ᴛᴏ ᴀɴʏ ǫᴜᴇsᴛɪᴏɴ ᴡɪᴛʜ ᴄʜᴀᴛɢᴘᴛ
+/myplan - ᴛᴏ ᴄʜᴇᴄᴋ ʏᴏᴜʀ ᴘʟᴀɴ ᴅᴇᴛᴀɪʟs
+/plans - ᴛᴏ ɢᴇᴛ ᴘʟᴀɴ ᴅᴇᴛᴀɪʟs
+<b>━━━━━━━━━━━━━━━━━━</b>"""
     
-    USER_COMMAND_TXT = """<b>Here is bot user commands 👇
+    SOURCE_TXT = """<b>sᴏᴜʀᴄᴇ ɪɴꜰɪɴɪᴛʏ</b>
+<b>━━━━━━━━━━━━━━━━━━</b>
+<b>স্বাগতম 🎉🎊</b>
 
-/start - to check bot alive or not
-/id - to check group or channel id
-/openai - Find solution to any question with ChatGPT
-/myplan - to check your plan details
-/plans - to get plan details</b>"""
-    
-    SOURCE_TXT = """<b>স্বাগতম 🎉🎊
+<b>- sᴏᴜʀᴄᴇ -</b> <a href='https://t.me/infinity_botzz'>ʜᴇʀᴇ</a>
 
-- ꜱᴏᴜʀᴄᴇ - <a href=https://t.me/infinity_botzz>ʜᴇʀᴇ</a>
-
-ᴄᴏɴᴛᴀᴄᴛ ᴛᴏ ᴍᴀᴋᴇ ᴀ ʙᴏᴛ ʟɪᴋᴇ ᴛʜɪꜱ  -
-<a href=https://t.me/infinity_botzz>ɪɴꜰɪɴɪᴛʏ ʙᴏᴛᴢ</a>
-<a href=https://t.me/talk_mrs_bot>ᴍʀ ɪɴꜰɪɴɪᴛʏ</a></b>"""
+<b>ᴄᴏɴᴛᴀᴄᴛ ᴛᴏ ᴍᴀᴋᴇ ᴀ ʙᴏᴛ ʟɪᴋᴇ ᴛʜɪꜱ -</b>
+<a href='https://t.me/infinity_botzz'>ɪɴꜰɪɴɪᴛʏ ʙᴏᴛᴢ</a>
+<a href='https://t.me/talk_mrs_bot'>ᴍʀ ɪɴꜰɪɴɪᴛʏ</a>
+<b>━━━━━━━━━━━━━━━━━━</b>"""
 
     PREMIUM_PLAN_TEXT = """<b><i><u>- ᴀᴠᴀɪʟᴀʙʟᴇ ᴘʟᴀɴs - </u>
 
