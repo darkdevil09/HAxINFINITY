@@ -64,7 +64,7 @@ else:
     SUPPORT_GROUP = int(SUPPORT_GROUP)
 
 # MongoDB information
-DATABASE_URL = environ.get('DATABASE_URL', "mongodb+srv://darkdevilmp:darkdevil007mp@autofilterddmp.zuw3c4q.mongodb.net/?retryWrites=true&w=majority")
+DATABASE_URL = environ.get('DATABASE_URL', "")
 if len(DATABASE_URL) == 0:
     print('Error - DATABASE_URL is missing, exiting now')
     exit()
@@ -72,10 +72,10 @@ DATABASE_NAME = environ.get('DATABASE_NAME', "Autofilterddmp")
 COLLECTION_NAME = environ.get('COLLECTION_NAME', 'infinitytob')
 
 # Links
-SUPPORT_LINK = environ.get('SUPPORT_LINK', 'https://t.me/+EapqivvgHbc5YmY1')
+SUPPORT_LINK = environ.get('SUPPORT_LINK', 'https://t.me/+or1WA716YBc5MTVl')
 OWNER_USERNAME = environ.get("OWNER_USERNAME", "https://t.me/mpbotzsupport_bot")
 UPDATES_LINK = environ.get('UPDATES_LINK', 'https://t.me/infinity_botzz')
-FILMS_LINK = environ.get('FILMS_LINK', 'https://t.me/+nF7KliSj3RFkMzY1')
+FILMS_LINK = environ.get('FILMS_LINK', 'https://t.me/+YqSLcYCIIKxjODRl')
 TUTORIAL = environ.get("TUTORIAL", "https://t.me/links_tutorialbypp/23")
 VERIFY_TUTORIAL = environ.get("VERIFY_TUTORIAL", "https://t.me/links_tutorialbypp/23")
 
@@ -113,7 +113,7 @@ OWNER_UPI_ID = environ.get('OWNER_UPI_ID', 'paradox52693@okhdfcbank')
 
 # for stream
 IS_STREAM = is_enabled('IS_STREAM', True)
-BIN_CHANNEL = environ.get("BIN_CHANNEL", "-1001964309084")
+BIN_CHANNEL = environ.get("BIN_CHANNEL", "-1003069971777")
 if len(BIN_CHANNEL) == 0:
     print('Error - BIN_CHANNEL is missing, exiting now')
     exit()
@@ -134,4 +134,4 @@ else:
         exit()
 
 #start_command_reactions
-REACTIONS = ["🤝", "😇", "🤗", "😍", "👍", "🎅", "😐", "🥰", "🤩", "😱", "🤣", "😘", "👏", "😛", "😈", "🎉", "⚡️", "🫡", "🤓", "😎", "🏆", "🔥", "🤭", "🌚", "🆒", "👻", "😁"] #don't add any emoji because tg not support all emoji reactions
+REACTIONS = ["🤝", "😇", "🤗", "😍", "👍", "🥰", "🤩", "👏", "🎉", "⚡️", "🫡", "😎", "🏆", "🔥", "🆒", "😁"]
