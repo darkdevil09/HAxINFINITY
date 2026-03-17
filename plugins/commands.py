@@ -111,9 +111,17 @@ async def start(client, message):
             ],[
                 InlineKeyboardButton('🗳 Tutorial 🗳', url=VERIFY_TUTORIAL)
             ]]
-            await message.reply("📌 You are not verified today. Please verify yourself to use bot .🔐", reply_markup=InlineKeyboardMarkup(btn), protect_content=True)
+            await message.reply(
+              "🔐 ᴠᴇʀɪғɪᴄᴀᴛɪᴏɴ ʀᴇǫᴜɪʀᴇᴅ\n"
+              "━━━━━━━━━━━━━━━━━━\n\n"
+              "📌 ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴠᴇʀɪғɪᴇᴅ ᴛᴏᴅᴀʏ\n"
+              "ᴘʟᴇᴀꜱᴇ ᴄᴏᴍᴘʟᴇᴛᴇ ᴠᴇʀɪғɪᴄᴀᴛɪᴏɴ\n"
+              "ᴛᴏ ᴄᴏɴᴛɪɴᴜᴇ ᴜꜱɪɴɢ ᴛʜᴇ ʙᴏᴛ\n\n"
+              "👇 ᴛᴀᴘ ᴛʜᴇ ʙᴜᴛᴛᴏɴ ʙᴇʟᴏᴡ",
+              reply_markup=InlineKeyboardMarkup(btn),
+              protect_content=True
+            )
             return
-
     settings = await get_settings(int(mc.split("_", 2)[1]))
     if not await db.has_premium_access(message.from_user.id):
         if settings['fsub']:
