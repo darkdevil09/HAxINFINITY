@@ -1,5 +1,3 @@
-# Credit - adarsh-goel
-
 from aiohttp import web
 from web.stream_routes import routes
 
