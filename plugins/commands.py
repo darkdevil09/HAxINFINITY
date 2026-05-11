@@ -662,3 +662,25 @@ async def remove_fsub(client, message):
         return
     await save_group_settings(grp_id, 'fsub', None)
     await message.reply_text("<b>Successfully removed your force channel id...</b>")
+
+@Client.on_message(filters.command('delete_all'))
+async def delete_all_index(bot, message):
+    user_id = message.from_user.id
+    if user_id not in ADMINS:
+        await message.delete()
+        return
+        
+    files = await Media.count_documents()
+    if int(files) == 0:
+        return await message.reply_text('<b>⚠️ ɴᴏ ꜰɪʟᴇꜱ ᴀᴠᴀɪʟᴀʙʟᴇ ᴛᴏ ᴅᴇʟᴇᴛᴇ ɪɴ ᴅᴀᴛᴀʙᴀꜱᴇ.</b>')
+        
+    btn = [[
+        InlineKeyboardButton(text="✅ ʏᴇꜱ, ᴅᴇʟᴇᴛᴇ ᴀʟʟ", callback_data="delete_all")
+    ],[
+        InlineKeyboardButton(text="🚫 ᴄʟᴏꜱᴇ 🚫", callback_data="close_data")
+    ]]
+    
+    await message.reply_text(
+        f"<b>⚠️ ᴡᴀʀɴɪɴɢ!\n\nʏᴏᴜ ᴀʀᴇ ᴀʙᴏᴜᴛ ᴛᴏ ᴅᴇʟᴇᴛᴇ ᴀʟʟ <code>{files}</code> ꜰɪʟᴇꜱ ꜰʀᴏᴍ ʏᴏᴜʀ ᴅᴀᴛᴀʙᴀꜱᴇ.\n\nᴀʀᴇ ʏᴏᴜ ꜱᴜʀᴇ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴘʀᴏᴄᴇᴇᴅ? ᴛʜɪꜱ ᴄᴀɴɴᴏᴛ ʙᴇ ᴜɴᴅᴏɴᴇ.</b>", 
+        reply_markup=InlineKeyboardMarkup(btn)
+    )
