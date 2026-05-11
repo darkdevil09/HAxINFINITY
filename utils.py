@@ -24,6 +24,7 @@ class temp(object):
     SETTINGS = {}
     VERIFICATIONS = {}
     FILES = {}
+    SEARCH_STATE = {} # Core memory for Smart Filters
     USERS_CANCEL = False
     GROUPS_CANCEL = False
     BOT = None
@@ -35,9 +36,7 @@ async def is_subscribed(bot, query, channel):
         try:
             await bot.get_chat_member(id, query.from_user.id)
         except UserNotParticipant:
-            btn.append(
-                [InlineKeyboardButton(f'Join {chat.title}', url=chat.invite_link)]
-            )
+            btn.append([InlineKeyboardButton(f'Join {chat.title}', url=chat.invite_link)])
         except Exception as e:
             pass
     return btn
@@ -241,17 +240,49 @@ async def get_seconds(time_string):
             value = int(value)
         return value, unit
     value, unit = extract_value_and_unit(time_string)
-    if unit == 's':
-        return value
-    elif unit == 'min':
-        return value * 60
-    elif unit == 'hour':
-        return value * 3600
-    elif unit == 'day':
-        return value * 86400
-    elif unit == 'month':
-        return value * 86400 * 30
-    elif unit == 'year':
-        return value * 86400 * 365
-    else:
-        return 0
+    if unit == 's': return value
+    elif unit == 'min': return value * 60
+    elif unit == 'hour': return value * 3600
+    elif unit == 'day': return value * 86400
+    elif unit == 'month': return value * 86400 * 30
+    elif unit == 'year': return value * 86400 * 365
+    else: return 0
+
+# --- SMART PARSER ---
+def smart_query_parser(raw_query):
+    query = str(raw_query).strip().lower()
+    locks = {'lang': None, 'qual': None, 'season': None, 'episode': None, 'year': None}
+    
+    year_match = re.search(r'\b(19\d{2}|20\d{2})\b', query)
+    if year_match:
+        locks['year'] = year_match.group(1)
+        query = query.replace(locks['year'], '')
+
+    season_match = re.search(r'\b(?:s|season\s?)(\d{1,2})\b', query)
+    if season_match:
+        locks['season'] = str(int(season_match.group(1)))
+        query = query.replace(season_match.group(0), '')
+
+    ep_match = re.search(r'\b(?:e|ep|episode\s?)(\d{1,2})\b', query)
+    if ep_match:
+        locks['episode'] = str(int(ep_match.group(1)))
+        query = query.replace(ep_match.group(0), '')
+
+    try:
+        from info import LANGUAGES, QUALITY
+        for lang in LANGUAGES:
+            if lang in query:
+                locks['lang'] = lang.lower()
+                query = query.replace(lang, '')
+                break
+        for qual in QUALITY:
+            if qual in query:
+                locks['qual'] = qual.lower()
+                query = query.replace(qual, '')
+                break
+    except:
+        pass
+
+    clean_query = re.sub(r'[\.\+\-_]', ' ', query)
+    clean_query = re.sub(r'\s+', ' ', clean_query).strip()
+    return clean_query, locks

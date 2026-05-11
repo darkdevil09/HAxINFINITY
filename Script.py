@@ -10,7 +10,7 @@ class script(object):
 │▸ ᴅᴀᴛᴀʙᴀsᴇ : <a href=https://www.mongodb.com>ᴍᴏɴɢᴏ ᴅʙ</a>
 │▸ ʟᴀɴɢᴜᴀɢᴇ : <a href=https://www.python.org>ᴘʏᴛʜᴏɴ</a>
 │▸ ʟɪʙʀᴀʀʏ : <a href=https://pyrogram.org>ᴘʏʀᴏɢʀᴀᴍ</a>
-│▸ ᴠᴇʀsɪᴏɴ : ᴠ.2.5.1
+│▸ ᴠᴇʀsɪᴏɴ : ᴠ.3.0
 ╰━━━━━❰<a href=https://t.me/infinity_botzz>ɪɴғɪɴɪᴛʏ ʙᴏᴛᴢ</a>❱━━━══❍⊱❁۪۪</b>"""
 
     MY_OWNER_TXT = """<b>╭━━━━━❰ᴍʏ ᴏᴡɴᴇʀ ᴅᴇᴀᴛɪʟs❱══❍⊱❁۪۪
@@ -46,18 +46,18 @@ class script(object):
 ★ <b>ɪᴅ</b>: <code>{}</code>
 <b>━━━━━━━━━━━━━━━━━━</b>"""
 
-    NOT_FILE_TXT = """👋 Hello {},
+    NOT_FILE_TXT = """👋 ʜᴇʟʟᴏ {},
 
-I can't find the <b>{}</b> in my database! 🥲
+ɪ ᴄᴀɴ'ᴛ ꜰɪɴᴅ ᴛʜᴇ <b>{}</b> ɪɴ ᴍʏ ᴅᴀᴛᴀʙᴀꜱᴇ! 🥲
 
 👉 ꜱᴇᴀʀᴄʜ ᴏɴ ɢᴏᴏɢʟᴇ ᴀɴᴅ ᴄʜᴇᴄᴋ ʏᴏᴜʀ ꜱᴩᴇʟʟɪɴɢ.
 👉 ᴩʟᴇᴀꜱᴇ ʀᴇᴀᴅ ᴛʜᴇ ɪɴꜱᴛʀᴜᴄᴛɪᴏɴꜱ ᴛᴏ ɢᴇᴛ ʙᴇᴛᴛᴇʀ ʀᴇꜱᴜʟᴛꜱ.
 👉 ᴄʜᴇᴄᴋ ᴛʜᴇ ᴍᴏᴠɪᴇ ʀᴇʟᴇᴀꜱᴇ ᴅᴀᴛᴇ.
-👉ʀᴇᴩᴏʀᴛ @mpbotzsupport_bot ɪꜰ ʏᴏᴜ ᴅᴏɴ'ᴛ ꜰɪɴᴅ."""
+👉 ʀᴇᴩᴏʀᴛ @mpbotzsupport_bot ɪꜰ ʏᴏᴜ ᴅᴏɴ'ᴛ ꜰɪɴᴅ ɪᴛ."""
     
     EARN_TXT = """<b>ʜᴏᴡ ᴛᴏ ᴇᴀʀɴ ꜰʀᴏᴍ ᴛʜɪs ʙᴏᴛ
 
-➥ ɴᴏᴡ ʏᴏᴜ ᴄᴀɴ ᴀʟsᴏ ᴇᴀʀɴ ᴍᴏɴᴇʏ ʙʏ ᴜsɪɴɢ ᴛʜɪꜱ ʙᴏᴛ.
+➥ ɴᴏᴡ ʏᴏᴜ ᴄᴀɴ ᴀʟꜱᴏ ᴇᴀʀɴ ᴍᴏɴᴇʏ ʙʏ ᴜꜱɪɴɢ ᴛʜɪꜱ ʙᴏᴛ.
 
 » sᴛᴇᴘ 1:- ғɪʀsᴛ ʏᴏᴜ ʜᴀᴠᴇ ᴛᴏ ᴀᴅᴅ ᴛʜɪs ʙᴏᴛ ɪɴ ʏᴏᴜʀ ɢʀᴏᴜᴘ ᴡɪᴛʜ ᴀᴅᴍɪɴ ᴘᴇʀᴍɪssɪᴏɴ.
 
@@ -71,40 +71,35 @@ I can't find the <b>{}</b> in my database! 🥲
 
 ➥ ɪꜰ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴄᴏɴɴᴇᴄᴛ ʏᴏᴜʀ ᴏᴡɴ sʜᴏʀᴛɴᴇʀ ᴛʜᴇɴ ᴊᴜsᴛ sᴇɴᴅ ᴛʜᴇ ɢɪᴠᴇɴ ᴅᴇᴛᴀɪʟs ɪɴ ᴄᴏʀʀᴇᴄᴛ ꜰᴏʀᴍᴀᴛ ɪɴ ʏᴏᴜʀ ɢʀᴏᴜᴘ
 
-➥ ғᴏʀᴍᴀᴛ ↓↓↓
-
-<code>/set_shortlink sʜᴏʀᴛɴᴇʀ sɪᴛᴇ sʜᴏʀᴛɴᴇʀ ᴀᴘɪ</code>
+➥ ꜰᴏʀᴍᴀᴛ ↓↓↓
+<code>/set_shortlink ꜱʜᴏʀᴛɴᴇʀ_ꜱɪᴛᴇ ꜱʜᴏʀᴛɴᴇʀ_ᴀᴘɪ</code>
 
 ➥ ᴇxᴀᴍᴘʟᴇ ↓↓↓
+<code>/set_shortlink inshort.com 9bccb0b14ed6841652fa22d3481907788c1b8838</code>
 
-<code>/set_shortlink inshort.com9bccb0b14ed6841652fa22d3481907788c1b8838</code>
+➥ ɪꜰ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴄʜᴇᴄᴋ ᴡʜɪᴄʜ ꜱʜᴏʀᴛᴇɴᴇʀ ʏᴏᴜ ʜᴀᴠᴇ ᴄᴏɴɴᴇᴄᴛᴇᴅ, ꜱᴇɴᴅ ᴛʜɪꜱ ᴄᴏᴍᴍᴀɴᴅ: /get_shortlink
 
-➥ ɪꜰ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴄʜᴇᴄᴋ ᴡʜɪᴄʜ sʜᴏʀᴛᴇɴᴇʀ ʏᴏᴜ ʜᴀᴠᴇ ᴄᴏɴɴᴇᴄᴛᴇᴅ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ ᴛʜᴇɴ sᴇɴᴅ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ ᴛᴏ ᴛʜᴇ ɢʀᴏᴜᴘ /get_shortlink
+📝 ɴᴏᴛᴇ:- ʏᴏᴜ ꜱʜᴏᴜʟᴅ ɴᴏᴛ ʙᴇ ᴀɴ ᴀɴᴏɴʏᴍᴏᴜꜱ ᴀᴅᴍɪɴ ɪɴ ɢʀᴏᴜᴘ.</b>"""
 
-📝 ɴᴏᴛᴇ:- ʏᴏᴜ sʜᴏᴜʟᴅ ɴᴏᴛ ʙᴇ ᴀɴ ᴀɴᴏɴʏᴍᴏᴜs ᴀᴅᴍɪɴ ɪɴ ɢʀᴏᴜᴘ. sᴇɴᴅ ᴄᴏᴍᴍᴀɴᴅ ᴡɪᴛʜᴏᴜᴛ ʙᴇɪɴɢ ᴀɴ ᴀɴᴏɴʏᴍᴜs ᴀᴅᴍɪɴ.</b>"""
+    IMDB_TEMPLATE = """✅ ɪ ꜰᴏᴜɴᴅ: <code>{query}</code>
 
+🏷 ᴛɪᴛʟᴇ: <a href={url}>{title}</a>
+🎭 ɢᴇɴʀᴇꜱ: {genres}
+📆 ʏᴇᴀʀ: <a href={url}/releaseinfo>{year}</a>
+🌟 ʀᴀᴛɪɴɢ: <a href={url}/ratings>{rating} / 10</a>
+☀️ ʟᴀɴɢᴜᴀɢᴇꜱ: {languages}
+📀 ʀᴜɴᴛɪᴍᴇ: {runtime} ᴍɪɴᴜᴛᴇꜱ
 
+🗣 ʀᴇǫᴜᴇꜱᴛᴇᴅ ʙʏ: {message.from_user.mention}
+©️ ᴘᴏᴡᴇʀᴇᴅ ʙʏ: <b>{message.chat.title}</b>"""
 
-    
-    IMDB_TEMPLATE = """✅ I Found: <code>{query}</code>
+    FILE_CAPTION = """<b>[{file_name}](https://t.me/+y6sw5OKRsck3OTA1)\n\n<b>•────•────────•────•\n📌 ʀᴇǫᴜᴇꜱᴛ ɢʀᴏᴜᴘ : [ᴄʟɪᴄᴋ ʜᴇʀᴇ](https://t.me/+ZYPevL2d9k45ZDll)\n🎬 ᴍᴏᴠɪᴇꜱ ᴄʜᴀɴɴᴇʟ : [ᴄʟɪᴄᴋ ʜᴇʀᴇ](https://t.me/hd_movies_hub01/7)\n•────•────────•────•\n\n©️ ᴘᴏᴡᴇʀᴇᴅ ʙʏ : [ɪɴꜰɪɴɪᴛʏ ʙᴏᴛᴢ](https://t.me/infinity_botzz)</b></b>
 
-🏷 Title: <a href={url}>{title}</a>
-🎭 Genres: {genres}
-📆 Year: <a href={url}/releaseinfo>{year}</a>
-🌟 Rating: <a href={url}/ratings>{rating} / 10</a>
-☀️ Languages: {languages}
-📀 RunTime: {runtime} Minutes
+🚫 ᴘʟᴇᴀꜱᴇ ᴄʟɪᴄᴋ ᴏɴ ᴛʜᴇ ᴄʟᴏꜱᴇ ʙᴜᴛᴛᴏɴ ɪꜰ ʏᴏᴜ ʜᴀᴠᴇ ꜱᴇᴇɴ ᴛʜᴇ ᴍᴏᴠɪᴇ 🚫"""
 
-🗣 Requested by: {message.from_user.mention}
-©️ Powered by: <b>{message.chat.title}</b>"""
+    WELCOME_TEXT = """👋 ʜᴇʟʟᴏ {mention}, ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ {title} ɢʀᴏᴜᴘ! 💞"""
 
-    FILE_CAPTION = """<b>[{file_name}](https://t.me/+y6sw5OKRsck3OTA1)\n\n<b>•────•────────•────•\n📌 ʀᴇǫᴜᴇsᴛ ɢʀᴏᴜᴘ : [ᴄʟɪᴄᴋ ʜᴇʀᴇ](https://t.me/+ZYPevL2d9k45ZDll)\n🎬 ᴍᴏᴠɪᴇs ᴄʜᴀɴɴᴇʟ : [ᴄʟɪᴄᴋ ʜᴇʀᴇ](https://t.me/hd_movies_hub01/7)\n•────•────────•────•\n\n©️ ᴘᴏᴡᴇʀᴇᴅ ʙʏ : [ɪɴғɪɴɪᴛʏ ʙᴏᴛᴢ](https://t.me/infinity_botzz)</b></b>
-
-🚫 ᴘʟᴇᴀsᴇ ᴄʟɪᴄᴋ ᴏɴ ᴛʜᴇ ᴄʟᴏsᴇ ʙᴜᴛᴛᴏɴ ɪꜰ ʏᴏᴜ ʜᴀᴠᴇ sᴇᴇɴ ᴛʜᴇ ᴍᴏᴠɪᴇ 🚫"""
-
-    WELCOME_TEXT = """👋 Hello {mention}, Welcome to {title} group! 💞"""
-
-    HELP_TXT = """<b>Note - <spoiler>Try each command without any argument to see more details 😹</spoiler></b>"""
+    HELP_TXT = """<b>Note - <spoiler>ᴛʀʏ ᴇᴀᴄʜ ᴄᴏᴍᴍᴀɴᴅ ᴡɪᴛʜᴏᴜᴛ ᴀɴʏ ᴀʀɢᴜᴍᴇɴᴛ ᴛᴏ ꜱᴇᴇ ᴍᴏʀᴇ ᴅᴇᴛᴀɪʟꜱ 😹</spoiler></b>"""
     
     ADMIN_COMMAND_TXT = """<b>ᴀᴅᴍɪɴ ᴘᴀɴᴇʟ</b>
 <b>━━━━━━━━━━━━━━━━━━</b>
