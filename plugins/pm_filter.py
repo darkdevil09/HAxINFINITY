@@ -180,8 +180,8 @@ async def auto_filter(client, msg, s, spoll_state=None):
         
         has_seasons = False
         for f in files:
-            seasons = re.findall(r'\b(?:s|season\s?)(\d{1,2})\b', f.file_name.lower())
-            if seasons and any(int(sea) > 0 for sea in seasons): # Avoid marking S0 as a valid season
+            seasons = re.findall(r'\b(?:s|season\s?)(\d{1,2})(?!\d)', f.file_name.lower())
+            if seasons and any(int(sea) > 0 for sea in seasons): 
                 has_seasons = True
                 break
         
@@ -193,7 +193,6 @@ async def auto_filter(client, msg, s, spoll_state=None):
         else:
             btn = [[InlineKeyboardButton(text=f"📂 {get_size(file.file_size)} {file.file_name}", callback_data=f'file#{file.file_id}')] for file in files]   
             
-        # --- 🚀 ADVANCED DYNAMIC UI WRAPPING ---
         filter_row_1 = []
         if locks.get('lang'): 
             if 'lang' in hard_locks: filter_row_1.append(InlineKeyboardButton(f"🔒 {str(locks['lang']).title()}", callback_data=f"alert#locked_lang"))
@@ -205,15 +204,13 @@ async def auto_filter(client, msg, s, spoll_state=None):
             else: filter_row_1.append(InlineKeyboardButton(f"✅ {str(locks['qual']).upper()}", callback_data=f"menu#qual#{key}"))
         else: filter_row_1.append(InlineKeyboardButton("🔍 ǫᴜᴀʟɪᴛʏ", callback_data=f"menu#qual#{key}"))
             
-        if locks.get('year'): 
-            if 'year' in hard_locks: filter_row_1.append(InlineKeyboardButton(f"🔒 {locks['year']}", callback_data=f"alert#locked_year"))
-            else: filter_row_1.append(InlineKeyboardButton(f"✅ {locks['year']}", callback_data=f"menu#year#{key}"))
-        else: filter_row_1.append(InlineKeyboardButton("📅 ʏᴇᴀʀ", callback_data=f"menu#year#{key}"))
 
         filter_row_2 = []
-        get_all_data = f"https://t.me/{temp.U_NAME}?start=all_{chat_id}_{key}" if settings['shortlink'] and not await db.has_premium_access(req) else f"send_all#{key}#{req}"
-        filter_row_2.append(InlineKeyboardButton("✨ ɢᴇᴛ ᴀʟʟ ✨", url=get_all_data) if get_all_data.startswith("http") else InlineKeyboardButton("✨ ɢᴇᴛ ᴀʟʟ ✨", callback_data=get_all_data))
-        
+        if locks.get('year'): 
+            if 'year' in hard_locks: filter_row_2.append(InlineKeyboardButton(f"🔒 {locks['year']}", callback_data=f"alert#locked_year"))
+            else: filter_row_2.append(InlineKeyboardButton(f"✅ {locks['year']}", callback_data=f"menu#year#{key}"))
+        else: filter_row_2.append(InlineKeyboardButton("📅 ʏᴇᴀʀ", callback_data=f"menu#year#{key}"))
+
         filter_row_3 = []
         if has_seasons or locks.get('season'):
             if locks.get('season'):
@@ -232,6 +229,14 @@ async def auto_filter(client, msg, s, spoll_state=None):
         btn.insert(1, filter_row_2)
         if filter_row_3:
             btn.insert(2, filter_row_3)
+        is_premium = await db.has_premium_access(req)
+        get_all_row = []
+        if is_premium:
+            get_all_row.append(InlineKeyboardButton("✨ ɢᴇᴛ ᴀʟʟ ꜰɪʟᴇꜱ ✨", callback_data=f"send_all#{key}#{req}"))
+        else:
+            get_all_row.append(InlineKeyboardButton("🔒 ɢᴇᴛ ᴀʟʟ (ᴘʀᴇᴍɪᴜᴍ) 🔒", callback_data="alert#premium_only"))
+        
+        btn.append(get_all_row)
         # ----------------------------------------
 
         if offset != "":
@@ -372,6 +377,9 @@ async def universal_filter_router(client, query):
         if f_type.startswith("locked_"):
             return await query.answer("🔒 ʟᴏᴄᴋᴇᴅ ʙʏ ʏᴏᴜʀ ᴛᴇxᴛ ǫᴜᴇʀʏ!", show_alert=True)
             
+        elif f_type == "premium_only":
+            return await query.answer("👑 ᴛʜɪꜱ ꜰᴇᴀᴛᴜʀᴇ ɪꜱ ꜰᴏʀ ᴘʀᴇᴍɪᴜᴍ ᴜꜱᴇʀꜱ ᴏɴʟʏ!", show_alert=True)
+
     if action == "apply":
         val, key = parts[2], parts[3]
     else:

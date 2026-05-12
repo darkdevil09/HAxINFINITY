@@ -258,7 +258,8 @@ def smart_query_parser(raw_query):
         hard_locks.append('year')
         query = query.replace(locks['year'], '')
         
-    season_match = re.search(r'\b(?:s|season\s?)(\d{1,2})\b', query)
+    # ✨ UPDATED REGEX: Handles "s01" and "s01e01" perfectly
+    season_match = re.search(r'\b(?:s|season\s?)(\d{1,2})(?!\d)', query)
     if season_match:
         val = str(int(season_match.group(1)))
         if val != "0": # Exclude Season 0
@@ -266,7 +267,8 @@ def smart_query_parser(raw_query):
             hard_locks.append('season')
         query = query.replace(season_match.group(0), '')
         
-    ep_match = re.search(r'\b(?:e|ep|episode\s?)(\d{1,2})\b', query)
+    # ✨ UPDATED REGEX: Extracts episode numbers even if attached to season like "s01e05"
+    ep_match = re.search(r'(?:\b|(?<=\d))(?:e|ep|episode\s?)(\d{1,3})(?!\d)', query)
     if ep_match:
         locks['episode'] = str(int(ep_match.group(1)))
         hard_locks.append('episode')

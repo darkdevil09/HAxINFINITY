@@ -58,8 +58,9 @@ async def get_search_results(query, max_results=MAX_BTN, offset=0, locks=None):
     and_conditions = []
     if locks.get('lang'): and_conditions.append({'file_name': re.compile(f"(?i){locks['lang']}")})
     if locks.get('qual'): and_conditions.append({'file_name': re.compile(f"(?i){locks['qual']}")})
-    if locks.get('season'): and_conditions.append({'file_name': re.compile(rf"(?i)(s|season\s?)0?{int(locks['season'])}\b")})
-    if locks.get('episode'): and_conditions.append({'file_name': re.compile(rf"(?i)(e|ep|episode\s?)0?{int(locks['episode'])}\b")})
+    # Updated Regex for Season and Episode to handle S01E01 format
+    if locks.get('season'): and_conditions.append({'file_name': re.compile(rf"(?i)\b(?:s|season\s?)0?{int(locks['season'])}(?!\d)")})
+    if locks.get('episode'): and_conditions.append({'file_name': re.compile(rf"(?i)(?:\b|\d)(?:e|ep|episode\s?)0?{int(locks['episode'])}(?!\d)")})
     if locks.get('year'): and_conditions.append({'file_name': re.compile(f"(?i){locks['year']}")})
 
     if and_conditions:
@@ -95,13 +96,14 @@ async def get_dynamic_filters(query, locks, filter_type):
         elif filter_type == 'year':
             years = re.findall(r'\b(19\d{2}|20\d{2})\b', fname)
             for y in years: available.add(y)
+        # Updated Regex for Season and Episode to extract from S01E01 format
         elif filter_type == 'season':
-            seasons = re.findall(r'\b(?:s|season\s?)(\d{1,2})\b', fname)
+            seasons = re.findall(r'\b(?:s|season\s?)(\d{1,2})(?!\d)', fname)
             for s in seasons: 
                 if int(s) > 0:
                     available.add(str(int(s)))
         elif filter_type == 'episode':
-            eps = re.findall(r'\b(?:e|ep|episode\s?)(\d{1,2})\b', fname)
+            eps = re.findall(r'(?:\b|(?<=\d))(?:e|ep|episode\s?)(\d{1,3})(?!\d)', fname)
             for e in eps: available.add(str(int(e)))
             
     if filter_type in ['year', 'season', 'episode']:
