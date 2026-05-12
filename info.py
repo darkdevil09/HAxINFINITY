@@ -17,13 +17,13 @@ def is_valid_ip(ip):
     return re.match(ip_pattern, ip) is not None
 
 # Bot information
-API_ID = environ.get('API_ID', '18952416')
+API_ID = environ.get('API_ID', '')
 if len(API_ID) == 0:
     print('Error - API_ID is missing, exiting now')
     exit()
 else:
     API_ID = int(API_ID)
-API_HASH = environ.get('API_HASH', '31e9fc0bb79e50d63092895ef64b991e')
+API_HASH = environ.get('API_HASH', '')
 if len(API_HASH) == 0:
     print('Error - API_HASH is missing, exiting now')
     exit()
@@ -37,7 +37,7 @@ PORT = int(environ.get('PORT', '8080'))
 PICS = (environ.get('PICS', 'https://telegra.ph/file/6d83965497670b153349c.jpg https://telegra.ph/file/48ab47e0347574da9b40e.jpg https://telegra.ph/file/0348681d8f3dd5b0d0c99.jpg https://telegra.ph/file/961b83193edf1fd86358d.jpg https://telegra.ph/file/752fce12f691a2e6604e0.jpg https://telegra.ph/file/aaf292ad7bc6d97a3859b.jpg')).split()
 
 # Bot Admins
-ADMINS = environ.get('ADMINS', '5533079371 5207138613')
+ADMINS = environ.get('ADMINS', '')
 if len(ADMINS) == 0:
     print('Error - ADMINS is missing, exiting now')
     exit()
