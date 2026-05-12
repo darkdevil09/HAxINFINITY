@@ -54,6 +54,13 @@ if len(LOG_CHANNEL) == 0:
     exit()
 else:
     LOG_CHANNEL = int(LOG_CHANNEL)
+    
+# --- ⚡ VERIFICATION LOG CHANNEL ---
+VERIFY_LOG_CHANNEL = environ.get('VERIFY_LOG_CHANNEL', '-1002043202934')
+if len(str(VERIFY_LOG_CHANNEL)) == 0 or str(VERIFY_LOG_CHANNEL).lower() == 'none':
+    VERIFY_LOG_CHANNEL = 0
+else:
+    VERIFY_LOG_CHANNEL = int(VERIFY_LOG_CHANNEL)
 
 # support group
 SUPPORT_GROUP = environ.get('SUPPORT_GROUP', '-1001732232755')

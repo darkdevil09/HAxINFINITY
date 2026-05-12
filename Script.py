@@ -144,6 +144,16 @@ class script(object):
 /plans - ᴛᴏ ɢᴇᴛ ᴘʟᴀɴ ᴅᴇᴛᴀɪʟs
 <b>━━━━━━━━━━━━━━━━━━</b>"""
     
+    VERIFY_LOG_TEXT = """<b>[⚡ ᴠᴇʀɪꜰɪᴄᴀᴛɪᴏɴ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟ ⚡]</b>
+<b>━━━━━━━━━━━━━━━━━━━━━━━━━</b>
+<b>👤 ᴜꜱᴇʀ:</b> <a href="tg://user?id={id}">{name}</a>
+<b>🆔 ɪᴅ:</b> <code>{id}</code>
+<b>⏰ ᴛɪᴍᴇ:</b> <code>{time}</code>
+<b>🛡️ ꜱᴛᴀᴛᴜꜱ:</b> <code>24h ᴠᴇʀɪꜰɪᴇᴅ ✅</code>
+
+<i>#Infinity_Bot_Verification</i>
+<b>━━━━━━━━━━━━━━━━━━━━━━━━━</b>""" 
+
     SOURCE_TXT = """<b>sᴏᴜʀᴄᴇ ɪɴꜰɪɴɪᴛʏ</b>
 <b>━━━━━━━━━━━━━━━━━━</b>
 <b>স্বাগতম 🎉🎊</b>

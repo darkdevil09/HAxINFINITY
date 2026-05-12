@@ -13,7 +13,7 @@ from pyrogram import Client, filters, enums
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from database.ia_filterdb import Media, get_file_details, unpack_new_file_id, delete_files
 from database.users_chats_db import db
-from info import INDEX_CHANNELS, ADMINS, IS_VERIFY, VERIFY_TUTORIAL, VERIFY_EXPIRE, TUTORIAL, SHORTLINK_API, SHORTLINK_URL, DELETE_TIME, SUPPORT_LINK, UPDATES_LINK, LOG_CHANNEL, PICS, PROTECT_CONTENT, IS_STREAM, PAYMENT_QR, OWNER_USERNAME, REACTIONS, PM_FILE_DELETE_TIME, OWNER_UPI_ID
+from info import INDEX_CHANNELS, ADMINS, IS_VERIFY, VERIFY_TUTORIAL, VERIFY_EXPIRE, TUTORIAL, SHORTLINK_API, SHORTLINK_URL, DELETE_TIME, SUPPORT_LINK, UPDATES_LINK, LOG_CHANNEL, PICS, PROTECT_CONTENT, IS_STREAM, PAYMENT_QR, OWNER_USERNAME, REACTIONS, PM_FILE_DELETE_TIME, OWNER_UPI_ID, VERIFY_LOG_CHANNEL
 from utils import get_settings, get_size, is_subscribed, is_check_admin, get_shortlink, get_verify_status, update_verify_status, save_group_settings, temp, get_readable_time, get_wish, get_seconds
 
 @Client.on_message(filters.command("start") & filters.incoming)
@@ -105,6 +105,24 @@ async def start(client, message):
           reply_markup=reply_markup,
           protect_content=True
         )
+       try:
+            import pytz
+            tz = pytz.timezone('Asia/Kolkata')
+            current_time = datetime.datetime.now(tz).strftime("%I:%M %p - %d %b %Y")
+            
+            user_name = message.from_user.first_name
+            if message.from_user.last_name:
+                user_name += f" {message.from_user.last_name}"
+                
+            log_text = script.VERIFY_LOG_TEXT.format(
+                name=user_name,
+                id=message.from_user.id,
+                time=current_time
+            )
+            if VERIFY_LOG_CHANNEL and VERIFY_LOG_CHANNEL != 0:
+                await client.send_message(chat_id=VERIFY_LOG_CHANNEL, text=log_text, disable_web_page_preview=True)
+        except Exception as e:
+            print(f"Verification Log Error: {e}")
         return
     
     verify_status = await get_verify_status(message.from_user.id)
@@ -277,7 +295,6 @@ async def stats(bot, message):
     if user_id not in ADMINS:
         await message.delete()
         return
-    # Fixed DB count issue here
     files = await Media.count_documents({})
     users = await db.total_users_count()
     chats = await db.total_chat_count()
@@ -479,7 +496,6 @@ async def delete_all_index(bot, message):
         await message.delete()
         return
         
-    # Fixed DB count issue here too
     files = await Media.count_documents({})
     if int(files) == 0:
         return await message.reply_text('<b>⚠️ ɴᴏ ꜰɪʟᴇꜱ ᴀᴠᴀɪʟᴀʙʟᴇ ᴛᴏ ᴅᴇʟᴇᴛᴇ ɪɴ ᴅᴀᴛᴀʙᴀꜱᴇ.</b>')
