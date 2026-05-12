@@ -50,7 +50,6 @@ async def group_search(client, message):
     except: return
         
     if not await db.get_chat(message.chat.id):
-        # FIX: Added safe fallback to prevent Koyeb deployment crash (NoneType error)
         try:
             total = await client.get_chat_members_count(message.chat.id)
         except Exception:
@@ -127,6 +126,8 @@ async def auto_filter(client, msg, s, spoll_state=None):
             req = msg.from_user.id if msg and msg.from_user else 0
             key = f"{msg.chat.id}-{msg.id}"
             raw_search = msg.text
+            
+            # Using your existing parser to get locks dictionary
             clean_search, locks = smart_query_parser(raw_search)
             
             spoll_state = {
@@ -149,6 +150,11 @@ async def auto_filter(client, msg, s, spoll_state=None):
         files, offset, total_results = await get_search_results(clean_search, offset=offset_val, locks=locks)
         
         if not files:
+            if is_new:
+                # Assuming you added add_missed_search in db earlier
+                try: await db.add_missed_search(clean_search)
+                except: pass
+                
             if is_new and settings["spell_check"]:
                 await advantage_spell_chok(msg, s)
             else:
@@ -184,45 +190,39 @@ async def auto_filter(client, msg, s, spoll_state=None):
         else:
             btn = [[InlineKeyboardButton(text=f"📂 {get_size(file.file_size)} {file.file_name}", callback_data=f'file#{file.file_id}')] for file in files]   
             
-        # --- NEW DYNAMIC UI LAYOUT ---
+        # --- 🚀 ADVANCED DYNAMIC UI WRAPPING ---
         filter_row_1 = []
-        # Language
-        if locks.get('lang'): filter_row_1.append(InlineKeyboardButton(f"✅ {locks['lang'].upper()}", callback_data=f"clear#lang#{key}"))
-        else: filter_row_1.append(InlineKeyboardButton("ʟᴀɴɢᴜᴀɢᴇ", callback_data=f"menu#lang#{key}"))
+        if locks.get('lang'): filter_row_1.append(InlineKeyboardButton(f"✅ {str(locks['lang']).title()}", callback_data=f"clear#lang#{key}"))
+        else: filter_row_1.append(InlineKeyboardButton("📰 ʟᴀɴɢᴜᴀɢᴇꜱ", callback_data=f"menu#lang#{key}"))
         
-        # Quality
-        if locks.get('qual'): filter_row_1.append(InlineKeyboardButton(f"✅ {locks['qual'].upper()}", callback_data=f"clear#qual#{key}"))
-        else: filter_row_1.append(InlineKeyboardButton("ǫᴜᴀʟɪᴛʏ", callback_data=f"menu#qual#{key}"))
+        if locks.get('qual'): filter_row_1.append(InlineKeyboardButton(f"✅ {str(locks['qual']).upper()}", callback_data=f"clear#qual#{key}"))
+        else: filter_row_1.append(InlineKeyboardButton("🔍 ǫᴜᴀʟɪᴛʏ", callback_data=f"menu#qual#{key}"))
             
-        # Year Logic (Lock if year is in query)
         if locks.get('year'): 
             filter_row_1.append(InlineKeyboardButton(f"🔒 {locks['year']}", callback_data=f"alert#locked_year"))
         else: 
-            filter_row_1.append(InlineKeyboardButton("ʏᴇᴀʀ", callback_data=f"menu#year#{key}"))
+            filter_row_1.append(InlineKeyboardButton("📅 ʏᴇᴀʀ", callback_data=f"menu#year#{key}"))
 
         filter_row_2 = []
         get_all_data = f"https://t.me/{temp.U_NAME}?start=all_{chat_id}_{key}" if settings['shortlink'] and not await db.has_premium_access(req) else f"send_all#{key}#{req}"
-        filter_row_2.append(InlineKeyboardButton("ɢᴇᴛ ᴀʟʟ", url=get_all_data) if get_all_data.startswith("http") else InlineKeyboardButton("ɢᴇᴛ ᴀʟʟ", callback_data=get_all_data))
+        filter_row_2.append(InlineKeyboardButton("✨ ɢᴇᴛ ᴀʟʟ ✨", url=get_all_data) if get_all_data.startswith("http") else InlineKeyboardButton("✨ ɢᴇᴛ ᴀʟʟ ✨", callback_data=get_all_data))
         
         filter_row_3 = []
-        # Season & Episode Logic
         if has_seasons or locks.get('season'):
             if locks.get('season'):
-                # Season selected, show Episode button beside it in a new row
-                filter_row_3.append(InlineKeyboardButton(f"✅ ꜱ{locks['season']}", callback_data=f"clear#season#{key}"))
+                filter_row_3.append(InlineKeyboardButton(f"✅ ꜱ{int(locks['season']):02d}", callback_data=f"clear#season#{key}"))
                 if locks.get('episode'): 
-                    filter_row_3.append(InlineKeyboardButton(f"✅ ᴇ{locks['episode']}", callback_data=f"clear#episode#{key}"))
+                    filter_row_3.append(InlineKeyboardButton(f"✅ ᴇ{int(locks['episode']):02d}", callback_data=f"clear#episode#{key}"))
                 else:
-                    filter_row_3.append(InlineKeyboardButton("ᴇᴘɪꜱᴏᴅᴇꜱ", callback_data=f"menu#episode#{key}"))
+                    filter_row_3.append(InlineKeyboardButton("🎭 ᴇᴘɪꜱᴏᴅᴇꜱ", callback_data=f"menu#episode#{key}"))
             else:
-                # No season selected, show Seasons button beside Get All
-                filter_row_2.append(InlineKeyboardButton("ꜱᴇᴀꜱᴏɴꜱ", callback_data=f"menu#season#{key}"))
+                filter_row_2.append(InlineKeyboardButton("🎭 ꜱᴇᴀꜱᴏɴꜱ", callback_data=f"menu#season#{key}"))
 
         btn.insert(0, filter_row_1)
         btn.insert(1, filter_row_2)
         if filter_row_3:
             btn.insert(2, filter_row_3)
-        # ------------------------------
+        # ----------------------------------------
 
         if offset != "":
             current_page = math.ceil(int(spoll_state.get('offset', 0)) / MAX_BTN) + 1 if spoll_state else 1
@@ -353,7 +353,6 @@ async def next_page(bot, query):
     if not msg: msg = query.message
     await auto_filter(bot, msg, query.message, spoll_state=state)
 
-# NEW UNIVERSAL ROUTER FOR CASCADING UI
 @Client.on_callback_query(filters.regex(r"^(menu|apply|clear|alert)#(lang|qual|year|season|episode|locked_year)"))
 async def universal_filter_router(client, query):
     parts = query.data.split("#")
@@ -373,25 +372,26 @@ async def universal_filter_router(client, query):
         return await query.answer("ꜱᴇᴀʀᴄʜ ᴄᴏɴᴛᴇxᴛ ᴇxᴘɪʀᴇᴅ!", show_alert=True)
         
     if action == "menu":
+        # RAM-Saving Call: Fetch options dynamically based on current locks
         avail = await get_dynamic_filters(state['query'], state['locks'], f_type)
         if not avail:
-            return await query.answer(f"ɴᴏ ᴏᴘᴛɪᴏɴꜱ ᴀᴠᴀɪʟᴀʙʟᴇ ʜᴇʀᴇ.", show_alert=True)
+            return await query.answer(f"ɴᴏ ᴏᴘᴛɪᴏɴꜱ ᴀᴠᴀɪʟᴀʙʟᴇ ʜᴇʀᴇ 😕", show_alert=True)
         
         btn = []
         for i in range(0, len(avail), 3):
             row = []
             for item in avail[i:i+3]:
-                display_text = item.upper() if f_type == 'qual' else (f"ꜱ{item}" if f_type == 'season' else (f"ᴇ{item}" if f_type == 'episode' else item.title()))
+                display_text = str(item).upper() if f_type == 'qual' else (f"ꜱ{int(item):02d}" if f_type == 'season' else (f"ᴇ{int(item):02d}" if f_type == 'episode' else str(item).title()))
                 row.append(InlineKeyboardButton(text=display_text, callback_data=f"apply#{f_type}#{item}#{key}"))
             btn.append(row)
         
         if f_type == 'lang':
-            btn.append([InlineKeyboardButton("ᴀɴʏ ʟᴀɴɢ", callback_data=f"clear#lang#{key}")])
+            btn.append([InlineKeyboardButton("✖️ ᴀɴʏ ʟᴀɴɢ", callback_data=f"clear#lang#{key}")])
         elif f_type == 'qual':
-            btn.append([InlineKeyboardButton("ᴀɴʏ ǫᴜᴀʟ", callback_data=f"clear#qual#{key}")])
+            btn.append([InlineKeyboardButton("✖️ ᴀɴʏ ǫᴜᴀʟ", callback_data=f"clear#qual#{key}")])
             
-        btn.append([InlineKeyboardButton("≼ ʙᴀᴄᴋ", callback_data=f"next_0_{key}_{state.get('offset', 0)}")])
-        await query.message.edit_text(f"<b>ꜱᴇʟᴇᴄᴛ ꜰɪʟᴛᴇʀ:</b>", reply_markup=InlineKeyboardMarkup(btn))
+        btn.append([InlineKeyboardButton("⪻ ʙᴀᴄᴋ", callback_data=f"next_0_{key}_{state.get('offset', 0)}")])
+        await query.message.edit_text(f"<b>🪄 ꜱᴇʟᴇᴄᴛ ꜰɪʟᴛᴇʀ ꜰᴏʀ {f_type.upper()}:</b>", reply_markup=InlineKeyboardMarkup(btn))
         return
         
     elif action == "apply":
@@ -401,7 +401,7 @@ async def universal_filter_router(client, query):
         if f_type == "season": state['locks']['episode'] = None 
         
     state['offset'] = 0 
-    await query.answer("ꜰɪʟᴛᴇʀ ᴜᴘᴅᴀᴛᴇᴅ! ✅")
+    await query.answer("ꜰɪʟᴛᴇʀ ᴀᴘᴘʟɪᴇᴅ! ✅")
     
     msg = query.message.reply_to_message
     if not msg: msg = query.message
@@ -420,9 +420,11 @@ async def advantage_spoll_choker(bot, query):
     msg = query.message.reply_to_message
     if not msg: msg = query.message
     
+    # Passing to router properly
+    clean_search, locks = smart_query_parser(search)
     state = {
-        'query': search, 
-        'locks': {'lang': None, 'qual': None, 'season': None, 'episode': None, 'year': None}, 
+        'query': clean_search, 
+        'locks': locks, 
         'offset': 0,
         'req': int(user),
         'key': f"{msg.chat.id}-{msg.id}"
@@ -547,7 +549,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
     elif query.data == "stats":
         if query.from_user.id not in ADMINS:
             return await query.answer("ᴀᴅᴍɪɴꜱ ᴏɴʟʏ! ⚠️", show_alert=True)
-        files = await Media.count_documents()
+        files = await Media.count_documents({}) # Handled the empty dictionary issue here too
         users = await db.total_users_count()
         chats = await db.total_chat_count()
         premium = await db.all_premium_users()
@@ -625,7 +627,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             await query.message.edit_text("ꜱᴏᴍᴇᴛʜɪɴɢ ᴡᴇɴᴛ ᴡʀᴏɴɢ! ⚠️")
             
     elif query.data == "delete_all":
-        files = await Media.count_documents()
+        files = await Media.count_documents({}) # Empty filter fix applied
         await query.answer('ᴅᴇʟᴇᴛɪɴɢ...')
         await Media.collection.drop()
         await query.message.edit_text(f"ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ {files} ꜰɪʟᴇꜱ ✅")
@@ -662,7 +664,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             await query.message.delete()
             return await query.message.reply(f'ꜱᴏᴍᴇᴛʜɪɴɢ ᴡᴇɴᴛ ᴡʀᴏɴɢ ⚠️.\n\n<code>{e}</code>')
         await query.message.delete()
-        if users_id: await query.message.reply(f"ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ᴜɴᴍᴜᴛᴇᴅ <code>{len(users_id)}</code> ᴜꜱᴇʀꜱ. ✅")
+        if users_id: await query.message.reply(f"ꜱᴜᴄꜱꜱꜰᴜʟʟʏ ᴜɴᴍᴜᴛᴇᴅ <code>{len(users_id)}</code> ᴜꜱᴇʀꜱ. ✅")
         else: await query.message.reply('ɴᴏᴛʜɪɴɢ ᴛᴏ ᴜɴᴍᴜᴛᴇ ᴜꜱᴇʀꜱ.')
 
     elif query.data == "unban_all_members":

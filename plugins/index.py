@@ -100,7 +100,7 @@ async def index_files_to_db(lst_msg_id, chat, msg, bot, skip):
                     )
 
                 # Smart UI Update: Edits message max once every 3 seconds to avoid FloodWait
-                if time.time() - last_edit_time > 3:
+                if time.time() - last_edit_time > 20:
                     percent = min(100, (current / lst_msg_id) * 100) if lst_msg_id > 0 else 0
                     filled = int(percent / 10)
                     bar = f"[{'█' * filled}{'░' * (10 - filled)}] {percent:.2f}%"

@@ -12,6 +12,7 @@ from info import DATABASE_URL, DATABASE_NAME, COLLECTION_NAME, MAX_BTN
 client = AsyncIOMotorClient(DATABASE_URL)
 db = client[DATABASE_NAME]
 instance = Instance.from_db(db)
+MAX_RESULTS_CAP = 30 
 
 @instance.register
 class Media(Document):
@@ -54,23 +55,24 @@ async def get_search_results(query, max_results=MAX_BTN, offset=0, locks=None):
 
     filter_query = {'file_name': regex}
     
-    # HARD LOCK SYSTEM -> Applied seamlessly
     and_conditions = []
     if locks.get('lang'): and_conditions.append({'file_name': re.compile(f"(?i){locks['lang']}")})
     if locks.get('qual'): and_conditions.append({'file_name': re.compile(f"(?i){locks['qual']}")})
-    if locks.get('season'): and_conditions.append({'file_name': re.compile(f"(?i)(s|season\s?){locks['season']}\b")})
-    if locks.get('episode'): and_conditions.append({'file_name': re.compile(f"(?i)(e|ep|episode\s?){locks['episode']}\b")})
+    if locks.get('season'): and_conditions.append({'file_name': re.compile(rf"(?i)(s|season\s?)0?{int(locks['season'])}\b")})
+    if locks.get('episode'): and_conditions.append({'file_name': re.compile(rf"(?i)(e|ep|episode\s?)0?{int(locks['episode'])}\b")})
     if locks.get('year'): and_conditions.append({'file_name': re.compile(f"(?i){locks['year']}")})
 
     if and_conditions:
         filter_query = {'$and': [filter_query] + and_conditions}
+
+    total_in_db = await Media.count_documents(filter_query)
+    total_results = min(total_in_db, MAX_RESULTS_CAP) 
 
     cursor = Media.find(filter_query)
     cursor.sort('$natural', -1)
     
     cursor.skip(offset).limit(max_results)
     files = await cursor.to_list(length=max_results)
-    total_results = await Media.count_documents(filter_query)
     
     next_offset = offset + max_results
     if next_offset >= total_results:
@@ -78,8 +80,7 @@ async def get_search_results(query, max_results=MAX_BTN, offset=0, locks=None):
     return files, next_offset, total_results
 
 async def get_dynamic_filters(query, locks, filter_type):
-    # Quick scan of active pool to determine what options exist for UI
-    files, _, _ = await get_search_results(query, locks=locks, max_results=500) 
+    files, _, _ = await get_search_results(query, locks=locks, max_results=30) 
     available = set()
     
     from info import LANGUAGES, QUALITY

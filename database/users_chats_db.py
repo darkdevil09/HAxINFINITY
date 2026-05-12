@@ -237,4 +237,25 @@ class Database:
         grp = await self.grp.find().to_list(None)
         return grp
         
+    async def add_missed_search(self, query):
+        """Silently logs missed queries with their frequency count"""
+        query = query.lower().strip()
+        if len(query) > 2:
+            col = self.db['missed_searches'] if hasattr(self, 'db') else self.col.database['missed_searches']
+            await col.update_one(
+                {"query": query},
+                {"$inc": {"count": 1}},
+                upsert=True
+            )
+
+    async def get_top_missed_searches(self, limit=15):
+        """Fetches top missing queries sorted by highest demand"""
+        col = self.db['missed_searches'] if hasattr(self, 'db') else self.col.database['missed_searches']
+        cursor = col.find({}).sort("count", -1).limit(limit)
+        return await cursor.to_list(length=limit)
+
+    async def clear_missed_searches(self):
+        """Clears the list once admin has uploaded the movies"""
+        col = self.db['missed_searches'] if hasattr(self, 'db') else self.col.database['missed_searches']
+        await col.delete_many({})
 db = Database()

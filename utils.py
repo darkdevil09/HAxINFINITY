@@ -1,15 +1,16 @@
-from pyrogram.errors import UserNotParticipant, FloodWait
-from info import LONG_IMDB_DESCRIPTION
-from imdb import Cinemagoer
-import asyncio
-from pyrogram.types import Message, InlineKeyboardButton
-from pyrogram import enums
 import os
+import re
 import pytz
-import time, re
+import asyncio
 from datetime import datetime
-from database.users_chats_db import db
+from pyrogram.errors import UserNotParticipant, FloodWait
+from pyrogram.types import InlineKeyboardButton
+from pyrogram import enums
+from imdb import Cinemagoer
 from shortzy import Shortzy
+
+from info import LONG_IMDB_DESCRIPTION
+from database.users_chats_db import db
 
 imdb = Cinemagoer() 
 
@@ -37,7 +38,7 @@ async def is_subscribed(bot, query, channel):
             await bot.get_chat_member(id, query.from_user.id)
         except UserNotParticipant:
             btn.append([InlineKeyboardButton(f'Join {chat.title}', url=chat.invite_link)])
-        except Exception as e:
+        except Exception:
             pass
     return btn
 
@@ -151,7 +152,7 @@ async def broadcast_messages(user_id, message, pin):
     except FloodWait as e:
         await asyncio.sleep(e.value)
         return await broadcast_messages(user_id, message, pin)
-    except Exception as e:
+    except Exception:
         await db.delete_user(int(user_id))
         return "Error"
 
@@ -159,15 +160,13 @@ async def groups_broadcast_messages(chat_id, message, pin):
     try:
         k = await message.copy(chat_id=chat_id)
         if pin:
-            try:
-                await k.pin()
-            except:
-                pass
+            try: await k.pin()
+            except: pass
         return "Success"
     except FloodWait as e:
         await asyncio.sleep(e.value)
         return await groups_broadcast_messages(chat_id, message, pin)
-    except Exception as e:
+    except Exception:
         await db.delete_chat(chat_id)
         return "Error"
 
@@ -248,41 +247,35 @@ async def get_seconds(time_string):
     elif unit == 'year': return value * 86400 * 365
     else: return 0
 
-# --- SMART PARSER ---
 def smart_query_parser(raw_query):
     query = str(raw_query).strip().lower()
     locks = {'lang': None, 'qual': None, 'season': None, 'episode': None, 'year': None}
-    
     year_match = re.search(r'\b(19\d{2}|20\d{2})\b', query)
     if year_match:
         locks['year'] = year_match.group(1)
         query = query.replace(locks['year'], '')
-
     season_match = re.search(r'\b(?:s|season\s?)(\d{1,2})\b', query)
     if season_match:
         locks['season'] = str(int(season_match.group(1)))
         query = query.replace(season_match.group(0), '')
-
     ep_match = re.search(r'\b(?:e|ep|episode\s?)(\d{1,2})\b', query)
     if ep_match:
         locks['episode'] = str(int(ep_match.group(1)))
         query = query.replace(ep_match.group(0), '')
-
     try:
         from info import LANGUAGES, QUALITY
         for lang in LANGUAGES:
-            if lang in query:
+            if re.search(rf"\b{lang}\b", query, re.IGNORECASE):
                 locks['lang'] = lang.lower()
-                query = query.replace(lang, '')
+                query = re.sub(rf"\b{lang}\b", "", query, flags=re.IGNORECASE)
                 break
         for qual in QUALITY:
-            if qual in query:
+            if re.search(rf"\b{qual}\b", query, re.IGNORECASE):
                 locks['qual'] = qual.lower()
-                query = query.replace(qual, '')
+                query = re.sub(rf"\b{qual}\b", "", query, flags=re.IGNORECASE)
                 break
     except:
         pass
-
     clean_query = re.sub(r'[\.\+\-_]', ' ', query)
     clean_query = re.sub(r'\s+', ' ', clean_query).strip()
     return clean_query, locks
