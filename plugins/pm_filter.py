@@ -50,8 +50,13 @@ async def group_search(client, message):
     except: return
         
     if not await db.get_chat(message.chat.id):
-        total = int(message.chat.members_count)
-        username = f'@{message.chat.username}' if message.chat.username else vp.invite_link
+        # FIX: Added safe fallback to prevent Koyeb deployment crash (NoneType error)
+        try:
+            total = await client.get_chat_members_count(message.chat.id)
+        except Exception:
+            total = 0 
+            
+        username = f'@{message.chat.username}' if getattr(message.chat, "username", None) else getattr(vp, "invite_link", "No Link")
         await client.send_message(LOG_CHANNEL, script.NEW_GROUP_TXT.format(message.chat.title, message.chat.id, username, total))       
         await db.add_chat(message.chat.id, message.chat.title)
         
@@ -114,7 +119,6 @@ async def group_search(client, message):
 
 async def auto_filter(client, msg, s, spoll_state=None):
     try:
-        # Safe assignment to handle deleted original messages
         chat_id = s.chat.id
         reply_id = msg.id if msg else None
         settings = await get_settings(chat_id)
@@ -144,7 +148,6 @@ async def auto_filter(client, msg, s, spoll_state=None):
             
         files, offset, total_results = await get_search_results(clean_search, offset=offset_val, locks=locks)
         
-        # BUG FIX: Handled properly without hitting files[0]
         if not files:
             if is_new and settings["spell_check"]:
                 await advantage_spell_chok(msg, s)
@@ -181,33 +184,45 @@ async def auto_filter(client, msg, s, spoll_state=None):
         else:
             btn = [[InlineKeyboardButton(text=f"📂 {get_size(file.file_size)} {file.file_name}", callback_data=f'file#{file.file_id}')] for file in files]   
             
+        # --- NEW DYNAMIC UI LAYOUT ---
         filter_row_1 = []
-        if locks.get('lang'): filter_row_1.append(InlineKeyboardButton(f"✅ {locks['lang'].title()}", callback_data=f"clear#lang#{key}"))
-        else: filter_row_1.append(InlineKeyboardButton("🈴 ʟᴀɴɢ", callback_data=f"menu#lang#{key}"))
+        # Language
+        if locks.get('lang'): filter_row_1.append(InlineKeyboardButton(f"✅ {locks['lang'].upper()}", callback_data=f"clear#lang#{key}"))
+        else: filter_row_1.append(InlineKeyboardButton("ʟᴀɴɢᴜᴀɢᴇ", callback_data=f"menu#lang#{key}"))
         
+        # Quality
         if locks.get('qual'): filter_row_1.append(InlineKeyboardButton(f"✅ {locks['qual'].upper()}", callback_data=f"clear#qual#{key}"))
-        else: filter_row_1.append(InlineKeyboardButton("🫧 ǫᴜᴀʟɪᴛʏ", callback_data=f"menu#qual#{key}"))
+        else: filter_row_1.append(InlineKeyboardButton("ǫᴜᴀʟɪᴛʏ", callback_data=f"menu#qual#{key}"))
             
-        if locks.get('year'): filter_row_1.append(InlineKeyboardButton(f"✅ {locks['year']}", callback_data=f"clear#year#{key}"))
-        else: filter_row_1.append(InlineKeyboardButton("📅 ʏᴇᴀʀ", callback_data=f"menu#year#{key}"))
+        # Year Logic (Lock if year is in query)
+        if locks.get('year'): 
+            filter_row_1.append(InlineKeyboardButton(f"🔒 {locks['year']}", callback_data=f"alert#locked_year"))
+        else: 
+            filter_row_1.append(InlineKeyboardButton("ʏᴇᴀʀ", callback_data=f"menu#year#{key}"))
 
         filter_row_2 = []
         get_all_data = f"https://t.me/{temp.U_NAME}?start=all_{chat_id}_{key}" if settings['shortlink'] and not await db.has_premium_access(req) else f"send_all#{key}#{req}"
-        filter_row_2.append(InlineKeyboardButton("✨ ɢᴇᴛ ᴀʟʟ ✨", url=get_all_data) if get_all_data.startswith("http") else InlineKeyboardButton("✨ ɢᴇᴛ ᴀʟʟ ✨", callback_data=get_all_data))
+        filter_row_2.append(InlineKeyboardButton("ɢᴇᴛ ᴀʟʟ", url=get_all_data) if get_all_data.startswith("http") else InlineKeyboardButton("ɢᴇᴛ ᴀʟʟ", callback_data=get_all_data))
         
+        filter_row_3 = []
+        # Season & Episode Logic
         if has_seasons or locks.get('season'):
             if locks.get('season'):
-                if locks.get('episode'): filter_row_2.append(InlineKeyboardButton(f"✅ ᴇ{locks['episode']}", callback_data=f"clear#episode#{key}"))
+                # Season selected, show Episode button beside it in a new row
+                filter_row_3.append(InlineKeyboardButton(f"✅ ꜱ{locks['season']}", callback_data=f"clear#season#{key}"))
+                if locks.get('episode'): 
+                    filter_row_3.append(InlineKeyboardButton(f"✅ ᴇ{locks['episode']}", callback_data=f"clear#episode#{key}"))
                 else:
-                    filter_row_2.append(InlineKeyboardButton(f"✅ ꜱ{locks['season']}", callback_data=f"clear#season#{key}"))
-                    filter_row_2.append(InlineKeyboardButton("🎞 ᴇᴘɪꜱᴏᴅᴇꜱ", callback_data=f"menu#episode#{key}"))
+                    filter_row_3.append(InlineKeyboardButton("ᴇᴘɪꜱᴏᴅᴇꜱ", callback_data=f"menu#episode#{key}"))
             else:
-                filter_row_2.append(InlineKeyboardButton("📺 ꜱᴇᴀꜱᴏɴꜱ", callback_data=f"menu#season#{key}"))
-                
-        filter_row_2.append(InlineKeyboardButton("🥇 ʙᴜʏ 🥇", url=f"https://t.me/{temp.U_NAME}?start=plans"))
+                # No season selected, show Seasons button beside Get All
+                filter_row_2.append(InlineKeyboardButton("ꜱᴇᴀꜱᴏɴꜱ", callback_data=f"menu#season#{key}"))
 
         btn.insert(0, filter_row_1)
         btn.insert(1, filter_row_2)
+        if filter_row_3:
+            btn.insert(2, filter_row_3)
+        # ------------------------------
 
         if offset != "":
             current_page = math.ceil(int(spoll_state.get('offset', 0)) / MAX_BTN) + 1 if spoll_state else 1
@@ -216,7 +231,6 @@ async def auto_filter(client, msg, s, spoll_state=None):
                 InlineKeyboardButton(text="ɴᴇxᴛ ⋟", callback_data=f"next_{req}_{key}_{offset}")
             ])
                 
-        # Safeguarded get_poster
         imdb = None
         if settings["imdb"]:
             try:
@@ -339,18 +353,23 @@ async def next_page(bot, query):
     if not msg: msg = query.message
     await auto_filter(bot, msg, query.message, spoll_state=state)
 
-@Client.on_callback_query(filters.regex(r"^(menu|apply|clear)#(lang|qual|year|season|episode)"))
+# NEW UNIVERSAL ROUTER FOR CASCADING UI
+@Client.on_callback_query(filters.regex(r"^(menu|apply|clear|alert)#(lang|qual|year|season|episode|locked_year)"))
 async def universal_filter_router(client, query):
     parts = query.data.split("#")
     action, f_type = parts[0], parts[1]
     
+    if action == "alert":
+        if f_type == "locked_year":
+            return await query.answer("ʟᴏᴄᴋᴇᴅ ʙʏ ʏᴏᴜʀ ǫᴜᴇʀʏ! 🔒", show_alert=True)
+            
     if action == "apply":
         val, key = parts[2], parts[3]
     else:
-        key = parts[2]
+        key = parts[2] if len(parts) > 2 else ""
         
     state = temp.SEARCH_STATE.get(key)
-    if not state:
+    if not state and action != "alert":
         return await query.answer("ꜱᴇᴀʀᴄʜ ᴄᴏɴᴛᴇxᴛ ᴇxᴘɪʀᴇᴅ!", show_alert=True)
         
     if action == "menu":
@@ -366,6 +385,11 @@ async def universal_filter_router(client, query):
                 row.append(InlineKeyboardButton(text=display_text, callback_data=f"apply#{f_type}#{item}#{key}"))
             btn.append(row)
         
+        if f_type == 'lang':
+            btn.append([InlineKeyboardButton("ᴀɴʏ ʟᴀɴɢ", callback_data=f"clear#lang#{key}")])
+        elif f_type == 'qual':
+            btn.append([InlineKeyboardButton("ᴀɴʏ ǫᴜᴀʟ", callback_data=f"clear#qual#{key}")])
+            
         btn.append([InlineKeyboardButton("≼ ʙᴀᴄᴋ", callback_data=f"next_0_{key}_{state.get('offset', 0)}")])
         await query.message.edit_text(f"<b>ꜱᴇʟᴇᴄᴛ ꜰɪʟᴛᴇʀ:</b>", reply_markup=InlineKeyboardMarkup(btn))
         return

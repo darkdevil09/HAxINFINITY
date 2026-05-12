@@ -684,3 +684,41 @@ async def delete_all_index(bot, message):
         f"<b>⚠️ ᴡᴀʀɴɪɴɢ!\n\nʏᴏᴜ ᴀʀᴇ ᴀʙᴏᴜᴛ ᴛᴏ ᴅᴇʟᴇᴛᴇ ᴀʟʟ <code>{files}</code> ꜰɪʟᴇꜱ ꜰʀᴏᴍ ʏᴏᴜʀ ᴅᴀᴛᴀʙᴀꜱᴇ.\n\nᴀʀᴇ ʏᴏᴜ ꜱᴜʀᴇ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴘʀᴏᴄᴇᴇᴅ? ᴛʜɪꜱ ᴄᴀɴɴᴏᴛ ʙᴇ ᴜɴᴅᴏɴᴇ.</b>", 
         reply_markup=InlineKeyboardMarkup(btn)
     )
+
+@Client.on_message(filters.command(["del", "delete"]) & filters.private & filters.user(ADMINS))
+async def delete_garbage_file(client, message):
+    if not message.reply_to_message or not message.reply_to_message.media:
+        return await message.reply_text("⚠️ <b>Bhai, jise delete karna hai us file (video/document) ko forward karo aur uspe reply karke `/del` likho.</b>")
+
+    media = getattr(message.reply_to_message, message.reply_to_message.media.value, None)
+    if not media:
+        return await message.reply_text("⚠️ <b>Invalid media! Yeh file nahi hai.</b>")
+
+    file_id = media.file_id
+    file_name = getattr(media, "file_name", "None")
+    file_size = getattr(media, "file_size", 0)
+
+    delete_msg = await message.reply_text(f"⏳ <b>ᴅᴇʟᴇᴛɪɴɢ <code>{file_name}</code> ꜰʀᴏᴍ ᴅᴀᴛᴀʙᴀꜱᴇ...</b>")
+
+    try:
+        # Smart Pro Query: Matches exact file_id OR exact (file_name + file_size)
+        # delete_many use kar rahe hain taaki agar yeh duplicate ho toh saari entries udd jayein
+        result = await Media.collection.delete_many({
+            "$or": [
+                {"_id": file_id},
+                {"file_name": file_name, "file_size": file_size}
+            ]
+        })
+        
+        if result.deleted_count > 0:
+            await delete_msg.edit_text(
+                f"✅ <b>ɢᴀʀʙᴀɢᴇ ꜰɪʟᴇ ᴅᴇʟᴇᴛᴇᴅ!</b>\n\n"
+                f"🗑 <b>Removed :</b> <code>{result.deleted_count}</code> matching files from DB.\n"
+                f"📁 <b>Name :</b> <code>{file_name}</code>\n"
+                f"⚖️ <b>Size :</b> <code>{get_size(file_size)}</code>"
+            )
+        else:
+            await delete_msg.edit_text("⚠️ <b>ꜰɪʟᴇ ɴᴏᴛ ꜰᴏᴜɴᴅ!</b>\nYeh DB mein match nahi hui ya pehle hi delete ho chuki hai.")
+            
+    except Exception as e:
+        await delete_msg.edit_text(f"❌ <b>Error:</b> <code>{e}</code>")
