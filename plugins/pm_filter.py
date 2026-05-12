@@ -193,42 +193,45 @@ async def auto_filter(client, msg, s, spoll_state=None):
         else:
             btn = [[InlineKeyboardButton(text=f"📂 {get_size(file.file_size)} {file.file_name}", callback_data=f'file#{file.file_id}')] for file in files]   
             
+        # --- 🚀 COMPACT FILTER UI: Lang, Qual, Year in ROW 1 ---
         filter_row_1 = []
+        
         if locks.get('lang'): 
             if 'lang' in hard_locks: filter_row_1.append(InlineKeyboardButton(f"🔒 {str(locks['lang']).title()}", callback_data=f"alert#locked_lang"))
             else: filter_row_1.append(InlineKeyboardButton(f"✅ {str(locks['lang']).title()}", callback_data=f"menu#lang#{key}"))
-        else: filter_row_1.append(InlineKeyboardButton("📰 ʟᴀɴɢᴜᴀɢᴇꜱ", callback_data=f"menu#lang#{key}"))
+        else: filter_row_1.append(InlineKeyboardButton("📰 ʟᴀɴɢ", callback_data=f"menu#lang#{key}"))
         
         if locks.get('qual'): 
             if 'qual' in hard_locks: filter_row_1.append(InlineKeyboardButton(f"🔒 {str(locks['qual']).upper()}", callback_data=f"alert#locked_qual"))
             else: filter_row_1.append(InlineKeyboardButton(f"✅ {str(locks['qual']).upper()}", callback_data=f"menu#qual#{key}"))
-        else: filter_row_1.append(InlineKeyboardButton("🔍 ǫᴜᴀʟɪᴛʏ", callback_data=f"menu#qual#{key}"))
+        else: filter_row_1.append(InlineKeyboardButton("🔍 ǫᴜᴀʟ", callback_data=f"menu#qual#{key}"))
             
-
-        filter_row_2 = []
         if locks.get('year'): 
-            if 'year' in hard_locks: filter_row_2.append(InlineKeyboardButton(f"🔒 {locks['year']}", callback_data=f"alert#locked_year"))
-            else: filter_row_2.append(InlineKeyboardButton(f"✅ {locks['year']}", callback_data=f"menu#year#{key}"))
-        else: filter_row_2.append(InlineKeyboardButton("📅 ʏᴇᴀʀ", callback_data=f"menu#year#{key}"))
+            if 'year' in hard_locks: filter_row_1.append(InlineKeyboardButton(f"🔒 {locks['year']}", callback_data=f"alert#locked_year"))
+            else: filter_row_1.append(InlineKeyboardButton(f"✅ {locks['year']}", callback_data=f"menu#year#{key}"))
+        else: filter_row_1.append(InlineKeyboardButton("📅 ʏᴇᴀʀ", callback_data=f"menu#year#{key}"))
 
-        filter_row_3 = []
+        # ROW 2: Seasons & Episodes
+        filter_row_2 = []
         if has_seasons or locks.get('season'):
             if locks.get('season'):
-                if 'season' in hard_locks: filter_row_3.append(InlineKeyboardButton(f"🔒 ꜱ{int(locks['season']):02d}", callback_data=f"alert#locked_season"))
-                else: filter_row_3.append(InlineKeyboardButton(f"✅ ꜱ{int(locks['season']):02d}", callback_data=f"menu#season#{key}"))
+                if 'season' in hard_locks: filter_row_2.append(InlineKeyboardButton(f"🔒 ꜱ{int(locks['season']):02d}", callback_data=f"alert#locked_season"))
+                else: filter_row_2.append(InlineKeyboardButton(f"✅ ꜱ{int(locks['season']):02d}", callback_data=f"menu#season#{key}"))
                 
                 if locks.get('episode'): 
-                    if 'episode' in hard_locks: filter_row_3.append(InlineKeyboardButton(f"🔒 ᴇ{int(locks['episode']):02d}", callback_data=f"alert#locked_episode"))
-                    else: filter_row_3.append(InlineKeyboardButton(f"✅ ᴇ{int(locks['episode']):02d}", callback_data=f"menu#episode#{key}"))
+                    if 'episode' in hard_locks: filter_row_2.append(InlineKeyboardButton(f"🔒 ᴇ{int(locks['episode']):02d}", callback_data=f"alert#locked_episode"))
+                    else: filter_row_2.append(InlineKeyboardButton(f"✅ ᴇ{int(locks['episode']):02d}", callback_data=f"menu#episode#{key}"))
                 else:
-                    filter_row_3.append(InlineKeyboardButton("🎭 ᴇᴘɪꜱᴏᴅᴇꜱ", callback_data=f"menu#episode#{key}"))
+                    filter_row_2.append(InlineKeyboardButton("🎭 ᴇᴘɪꜱᴏᴅᴇꜱ", callback_data=f"menu#episode#{key}"))
             else:
-                filter_row_3.append(InlineKeyboardButton("🎭 ꜱᴇᴀꜱᴏɴꜱ", callback_data=f"menu#season#{key}"))
+                filter_row_2.append(InlineKeyboardButton("🎭 ꜱᴇᴀꜱᴏɴꜱ", callback_data=f"menu#season#{key}"))
 
+        # Insert filter menus at the top
         btn.insert(0, filter_row_1)
-        btn.insert(1, filter_row_2)
-        if filter_row_3:
-            btn.insert(2, filter_row_3)
+        if filter_row_2:
+            btn.insert(1, filter_row_2)
+            
+        # Get All Button for Premium 
         is_premium = await db.has_premium_access(req)
         get_all_row = []
         if is_premium:
@@ -239,13 +242,28 @@ async def auto_filter(client, msg, s, spoll_state=None):
         btn.append(get_all_row)
         # ----------------------------------------
 
-        if offset != "":
-            current_page = math.ceil(int(spoll_state.get('offset', 0)) / MAX_BTN) + 1 if spoll_state else 1
-            btn.append([
-                InlineKeyboardButton(text=f"{current_page}/{math.ceil(total_results / MAX_BTN)}", callback_data="buttons"),
-                InlineKeyboardButton(text="ɴᴇxᴛ ⋟", callback_data=f"next_{req}_{key}_{offset}")
-            ])
+        # --- 🚀 UPDATED PAGINATION WITH BACK BUTTON ---
+        if offset != "" or offset_val > 0:
+            current_page = math.ceil(offset_val / MAX_BTN) + 1
+            total_pages = math.ceil(total_results / MAX_BTN)
+            if total_pages == 0: total_pages = 1
+            
+            page_btn = []
+            
+            # Show BACK button if we are on page 2 or above (offset_val > 0)
+            if offset_val > 0:
+                back_offset = max(0, offset_val - MAX_BTN)
+                page_btn.append(InlineKeyboardButton("⋞ ʙᴀᴄᴋ", callback_data=f"next_{req}_{key}_{back_offset}"))
                 
+            page_btn.append(InlineKeyboardButton(text=f"{current_page}/{total_pages}", callback_data="buttons"))
+            
+            # Show NEXT button if there are more results
+            if offset != "":
+                page_btn.append(InlineKeyboardButton("ɴᴇxᴛ ⋟", callback_data=f"next_{req}_{key}_{offset}"))
+                
+            btn.append(page_btn)
+        # ----------------------------------------
+
         imdb = None
         if settings["imdb"]:
             try:
@@ -476,7 +494,6 @@ async def advantage_spell_chok(client, message, s, spoll_state):
                 
                 spoll_state['query'] = clean_title
                 return await auto_filter(client, message, s, spoll_state=spoll_state)
-    # --- 🚀 SILENT AUTO-CORRECT MAGIC END ---
 
     if not movies:
         try:
@@ -496,7 +513,7 @@ async def advantage_spell_chok(client, message, s, spoll_state):
     buttons.append([InlineKeyboardButton("🚫 ᴄʟᴏꜱᴇ 🚫", callback_data="close_data")])
     
     try:
-        s = await s.edit_text(text=f"👋 ʜᴇʟʟᴏ {message.from_user.mention},\n\nɪ ᴄᴏᴜʟᴅɴ'ᴛ ꜰɪɴᴅ ᴛʜᴇ <b>'{search}'</b> ʏᴏᴜ ʀᴇǫᴜᴇꜱᴛᴇᴅ.\nꜱᴇʟᴇᴄᴛ ɪꜰ ʏᴏᴜ ᴍᴇᴀɴᴛ ᴏɴᴇ ᴏꜰ ᴛʜᴇꜱᴇ? 👇", reply_markup=InlineKeyboardMarkup(buttons))
+        await s.edit_text(text=f"👋 ʜᴇʟʟᴏ {message.from_user.mention},\n\nɪ ᴄᴏᴜʟᴅɴ'ᴛ ꜰɪɴᴅ ᴛʜᴇ <b>'{search_query}'</b> ʏᴏᴜ ʀᴇǫᴜᴇꜱᴛᴇᴅ.\nꜱᴇʟᴇᴄᴛ ɪꜰ ʏᴏᴜ ᴍᴇᴀɴᴛ ᴏɴᴇ ᴏꜰ ᴛʜᴇꜱᴇ? 👇", reply_markup=InlineKeyboardMarkup(buttons))
     except: pass
     await asyncio.sleep(300)
     try: await s.delete()
