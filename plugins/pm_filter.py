@@ -158,7 +158,7 @@ async def auto_filter(client, msg, s, spoll_state=None):
                 except: pass
                 
             if is_new and settings["spell_check"]:
-                await advantage_spell_chok(msg, s)
+                await advantage_spell_chok(client, msg, s, spoll_state)
             else:
                 try:
                     k = await s.edit_text(f"<b>⚠️ ɴᴏ ʀᴇꜱᴜʟᴛꜱ ꜰᴏᴜɴᴅ ꜰᴏʀ <code>{clean_search}</code>.</b>")
@@ -368,7 +368,7 @@ async def next_page(bot, query):
     if not msg: msg = query.message
     await auto_filter(bot, msg, query.message, spoll_state=state)
 
-@Client.on_callback_query(filters.regex(r"^(menu|apply|clear|alert)#(lang|qual|year|season|episode|locked_.*)"))
+@Client.on_callback_query(filters.regex(r"^(menu|apply|clear|alert)#(lang|qual|year|season|episode|locked_.*|premium_only)"))
 async def universal_filter_router(client, query):
     parts = query.data.split("#")
     action, f_type = parts[0], parts[1]
@@ -431,10 +431,10 @@ async def universal_filter_router(client, query):
     if not msg: msg = query.message
     await auto_filter(client, msg, query.message, spoll_state=state)
 
-async def advantage_spell_chok(message, s):
-    search = message.text
-    google_search = search.replace(" ", "+")
-    first_letter = search[0].lower() if search else "a"
+async def advantage_spell_chok(client, message, s, spoll_state):
+    search_query = spoll_state['query'] 
+    google_search = search_query.replace(" ", "+")
+    first_letter = search_query[0].lower() if search_query else "a"
     url = f"https://sg.media-imdb.com/suggests/{first_letter}/{google_search}.json"
     
     btn = [[
@@ -462,9 +462,25 @@ async def advantage_spell_chok(message, s):
     except Exception as e:
         print(f"IMDb Error: {e}")
 
+    if movies:
+        for movie in movies[:2]:
+            clean_title = re.sub(r'\(.*?\)', '', movie['title']).strip()
+            
+            files, _, _ = await get_search_results(clean_title, locks=spoll_state['locks'])
+            
+            if files:
+                try:
+                    await s.edit_text(f"<b><i>⚠️ ɴᴏ ʀᴇꜱᴜʟᴛꜱ ꜰᴏʀ '<code>{search_query}</code>'.\n✅ ᴀᴜᴛᴏ-ᴄᴏʀʀᴇᴄᴛᴇᴅ ᴛᴏ '<code>{clean_title}</code>'...</i></b>")
+                    await asyncio.sleep(1.5)
+                except: pass
+                
+                spoll_state['query'] = clean_title
+                return await auto_filter(client, message, s, spoll_state=spoll_state)
+    # --- 🚀 SILENT AUTO-CORRECT MAGIC END ---
+
     if not movies:
         try:
-            n = await s.edit_text(text=script.NOT_FILE_TXT.format(message.from_user.mention, search), reply_markup=InlineKeyboardMarkup(btn))
+            n = await s.edit_text(text=script.NOT_FILE_TXT.format(message.from_user.mention, search_query), reply_markup=InlineKeyboardMarkup(btn))
             await asyncio.sleep(60)
             await n.delete()
         except: pass
