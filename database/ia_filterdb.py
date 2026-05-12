@@ -82,7 +82,6 @@ async def get_search_results(query, max_results=MAX_BTN, offset=0, locks=None):
 async def get_dynamic_filters(query, locks, filter_type):
     files, _, _ = await get_search_results(query, locks=locks, max_results=30) 
     available = set()
-    
     from info import LANGUAGES, QUALITY
     
     for file in files:
@@ -98,7 +97,9 @@ async def get_dynamic_filters(query, locks, filter_type):
             for y in years: available.add(y)
         elif filter_type == 'season':
             seasons = re.findall(r'\b(?:s|season\s?)(\d{1,2})\b', fname)
-            for s in seasons: available.add(str(int(s)))
+            for s in seasons: 
+                if int(s) > 0:
+                    available.add(str(int(s)))
         elif filter_type == 'episode':
             eps = re.findall(r'\b(?:e|ep|episode\s?)(\d{1,2})\b', fname)
             for e in eps: available.add(str(int(e)))

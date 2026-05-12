@@ -250,32 +250,45 @@ async def get_seconds(time_string):
 def smart_query_parser(raw_query):
     query = str(raw_query).strip().lower()
     locks = {'lang': None, 'qual': None, 'season': None, 'episode': None, 'year': None}
+    hard_locks = []
+
     year_match = re.search(r'\b(19\d{2}|20\d{2})\b', query)
     if year_match:
         locks['year'] = year_match.group(1)
+        hard_locks.append('year')
         query = query.replace(locks['year'], '')
+        
     season_match = re.search(r'\b(?:s|season\s?)(\d{1,2})\b', query)
     if season_match:
-        locks['season'] = str(int(season_match.group(1)))
+        val = str(int(season_match.group(1)))
+        if val != "0": # Exclude Season 0
+            locks['season'] = val
+            hard_locks.append('season')
         query = query.replace(season_match.group(0), '')
+        
     ep_match = re.search(r'\b(?:e|ep|episode\s?)(\d{1,2})\b', query)
     if ep_match:
         locks['episode'] = str(int(ep_match.group(1)))
+        hard_locks.append('episode')
         query = query.replace(ep_match.group(0), '')
+        
     try:
         from info import LANGUAGES, QUALITY
         for lang in LANGUAGES:
             if re.search(rf"\b{lang}\b", query, re.IGNORECASE):
                 locks['lang'] = lang.lower()
+                hard_locks.append('lang')
                 query = re.sub(rf"\b{lang}\b", "", query, flags=re.IGNORECASE)
                 break
         for qual in QUALITY:
             if re.search(rf"\b{qual}\b", query, re.IGNORECASE):
                 locks['qual'] = qual.lower()
+                hard_locks.append('qual')
                 query = re.sub(rf"\b{qual}\b", "", query, flags=re.IGNORECASE)
                 break
     except:
         pass
+        
     clean_query = re.sub(r'[\.\+\-_]', ' ', query)
     clean_query = re.sub(r'\s+', ' ', clean_query).strip()
-    return clean_query, locks
+    return clean_query, locks, hard_locks

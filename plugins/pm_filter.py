@@ -1,6 +1,8 @@
 import random
 import asyncio
 import re
+import aiohttp
+import json
 from time import time as time_now
 import ast
 import math
@@ -65,8 +67,7 @@ async def group_search(client, message):
     
     if settings["auto_filter"]:
         if not user_id:
-            await message.reply("<b>ɪ'ᴍ ɴᴏᴛ ᴡᴏʀᴋɪɴɢ ꜰᴏʀ ᴀɴᴏɴʏᴍᴏᴜꜱ ᴀᴅᴍɪɴ! 🥷</b>")
-            return
+            return await message.reply("<b>ɪ'ᴍ ɴᴏᴛ ᴡᴏʀᴋɪɴɢ ꜰᴏʀ ᴀɴᴏɴʏᴍᴏᴜꜱ ᴀᴅᴍɪɴ! 🥷</b>")
             
         if message.chat.id == SUPPORT_GROUP:
             files, offset, total = await get_search_results(message.text)
@@ -112,8 +113,9 @@ async def group_search(client, message):
     else:
         k = await message.reply_text('<b>ᴀᴜᴛᴏ ꜰɪʟᴛᴇʀ ᴏꜰꜰ! ♻️</b>')
         await asyncio.sleep(5)
-        await k.delete()
-        try: await message.delete()
+        try:
+            await k.delete()
+            await message.delete()
         except: pass
 
 async def auto_filter(client, msg, s, spoll_state=None):
@@ -127,12 +129,12 @@ async def auto_filter(client, msg, s, spoll_state=None):
             key = f"{msg.chat.id}-{msg.id}"
             raw_search = msg.text
             
-            # Using your existing parser to get locks dictionary
-            clean_search, locks = smart_query_parser(raw_search)
+            clean_search, locks, hard_locks = smart_query_parser(raw_search)
             
             spoll_state = {
                 'query': clean_search,
                 'locks': locks,
+                'hard_locks': hard_locks,
                 'offset': 0,
                 'req': req,
                 'key': key
@@ -142,6 +144,7 @@ async def auto_filter(client, msg, s, spoll_state=None):
         else:
             clean_search = spoll_state['query']
             locks = spoll_state['locks']
+            hard_locks = spoll_state.get('hard_locks', [])
             offset_val = int(spoll_state.get('offset', 0)) if spoll_state.get('offset') else 0
             req = spoll_state.get('req', 0)
             key = spoll_state.get('key', f"{chat_id}-{s.id}")
@@ -151,7 +154,6 @@ async def auto_filter(client, msg, s, spoll_state=None):
         
         if not files:
             if is_new:
-                # Assuming you added add_missed_search in db earlier
                 try: await db.add_missed_search(clean_search)
                 except: pass
                 
@@ -178,7 +180,8 @@ async def auto_filter(client, msg, s, spoll_state=None):
         
         has_seasons = False
         for f in files:
-            if re.search(r'\b(?:s|season\s?)(\d{1,2})\b', f.file_name.lower()):
+            seasons = re.findall(r'\b(?:s|season\s?)(\d{1,2})\b', f.file_name.lower())
+            if seasons and any(int(sea) > 0 for sea in seasons): # Avoid marking S0 as a valid season
                 has_seasons = True
                 break
         
@@ -192,16 +195,20 @@ async def auto_filter(client, msg, s, spoll_state=None):
             
         # --- 🚀 ADVANCED DYNAMIC UI WRAPPING ---
         filter_row_1 = []
-        if locks.get('lang'): filter_row_1.append(InlineKeyboardButton(f"✅ {str(locks['lang']).title()}", callback_data=f"clear#lang#{key}"))
+        if locks.get('lang'): 
+            if 'lang' in hard_locks: filter_row_1.append(InlineKeyboardButton(f"🔒 {str(locks['lang']).title()}", callback_data=f"alert#locked_lang"))
+            else: filter_row_1.append(InlineKeyboardButton(f"✅ {str(locks['lang']).title()}", callback_data=f"menu#lang#{key}"))
         else: filter_row_1.append(InlineKeyboardButton("📰 ʟᴀɴɢᴜᴀɢᴇꜱ", callback_data=f"menu#lang#{key}"))
         
-        if locks.get('qual'): filter_row_1.append(InlineKeyboardButton(f"✅ {str(locks['qual']).upper()}", callback_data=f"clear#qual#{key}"))
+        if locks.get('qual'): 
+            if 'qual' in hard_locks: filter_row_1.append(InlineKeyboardButton(f"🔒 {str(locks['qual']).upper()}", callback_data=f"alert#locked_qual"))
+            else: filter_row_1.append(InlineKeyboardButton(f"✅ {str(locks['qual']).upper()}", callback_data=f"menu#qual#{key}"))
         else: filter_row_1.append(InlineKeyboardButton("🔍 ǫᴜᴀʟɪᴛʏ", callback_data=f"menu#qual#{key}"))
             
         if locks.get('year'): 
-            filter_row_1.append(InlineKeyboardButton(f"🔒 {locks['year']}", callback_data=f"alert#locked_year"))
-        else: 
-            filter_row_1.append(InlineKeyboardButton("📅 ʏᴇᴀʀ", callback_data=f"menu#year#{key}"))
+            if 'year' in hard_locks: filter_row_1.append(InlineKeyboardButton(f"🔒 {locks['year']}", callback_data=f"alert#locked_year"))
+            else: filter_row_1.append(InlineKeyboardButton(f"✅ {locks['year']}", callback_data=f"menu#year#{key}"))
+        else: filter_row_1.append(InlineKeyboardButton("📅 ʏᴇᴀʀ", callback_data=f"menu#year#{key}"))
 
         filter_row_2 = []
         get_all_data = f"https://t.me/{temp.U_NAME}?start=all_{chat_id}_{key}" if settings['shortlink'] and not await db.has_premium_access(req) else f"send_all#{key}#{req}"
@@ -210,13 +217,16 @@ async def auto_filter(client, msg, s, spoll_state=None):
         filter_row_3 = []
         if has_seasons or locks.get('season'):
             if locks.get('season'):
-                filter_row_3.append(InlineKeyboardButton(f"✅ ꜱ{int(locks['season']):02d}", callback_data=f"clear#season#{key}"))
+                if 'season' in hard_locks: filter_row_3.append(InlineKeyboardButton(f"🔒 ꜱ{int(locks['season']):02d}", callback_data=f"alert#locked_season"))
+                else: filter_row_3.append(InlineKeyboardButton(f"✅ ꜱ{int(locks['season']):02d}", callback_data=f"menu#season#{key}"))
+                
                 if locks.get('episode'): 
-                    filter_row_3.append(InlineKeyboardButton(f"✅ ᴇ{int(locks['episode']):02d}", callback_data=f"clear#episode#{key}"))
+                    if 'episode' in hard_locks: filter_row_3.append(InlineKeyboardButton(f"🔒 ᴇ{int(locks['episode']):02d}", callback_data=f"alert#locked_episode"))
+                    else: filter_row_3.append(InlineKeyboardButton(f"✅ ᴇ{int(locks['episode']):02d}", callback_data=f"menu#episode#{key}"))
                 else:
                     filter_row_3.append(InlineKeyboardButton("🎭 ᴇᴘɪꜱᴏᴅᴇꜱ", callback_data=f"menu#episode#{key}"))
             else:
-                filter_row_2.append(InlineKeyboardButton("🎭 ꜱᴇᴀꜱᴏɴꜱ", callback_data=f"menu#season#{key}"))
+                filter_row_3.append(InlineKeyboardButton("🎭 ꜱᴇᴀꜱᴏɴꜱ", callback_data=f"menu#season#{key}"))
 
         btn.insert(0, filter_row_1)
         btn.insert(1, filter_row_2)
@@ -353,14 +363,14 @@ async def next_page(bot, query):
     if not msg: msg = query.message
     await auto_filter(bot, msg, query.message, spoll_state=state)
 
-@Client.on_callback_query(filters.regex(r"^(menu|apply|clear|alert)#(lang|qual|year|season|episode|locked_year)"))
+@Client.on_callback_query(filters.regex(r"^(menu|apply|clear|alert)#(lang|qual|year|season|episode|locked_.*)"))
 async def universal_filter_router(client, query):
     parts = query.data.split("#")
     action, f_type = parts[0], parts[1]
     
     if action == "alert":
-        if f_type == "locked_year":
-            return await query.answer("ʟᴏᴄᴋᴇᴅ ʙʏ ʏᴏᴜʀ ǫᴜᴇʀʏ! 🔒", show_alert=True)
+        if f_type.startswith("locked_"):
+            return await query.answer("🔒 ʟᴏᴄᴋᴇᴅ ʙʏ ʏᴏᴜʀ ᴛᴇxᴛ ǫᴜᴇʀʏ!", show_alert=True)
             
     if action == "apply":
         val, key = parts[2], parts[3]
@@ -372,8 +382,10 @@ async def universal_filter_router(client, query):
         return await query.answer("ꜱᴇᴀʀᴄʜ ᴄᴏɴᴛᴇxᴛ ᴇxᴘɪʀᴇᴅ!", show_alert=True)
         
     if action == "menu":
-        # RAM-Saving Call: Fetch options dynamically based on current locks
-        avail = await get_dynamic_filters(state['query'], state['locks'], f_type)
+        temp_locks = state['locks'].copy()
+        temp_locks[f_type] = None 
+        avail = await get_dynamic_filters(state['query'], temp_locks, f_type)
+        
         if not avail:
             return await query.answer(f"ɴᴏ ᴏᴘᴛɪᴏɴꜱ ᴀᴠᴀɪʟᴀʙʟᴇ ʜᴇʀᴇ 😕", show_alert=True)
         
@@ -382,13 +394,18 @@ async def universal_filter_router(client, query):
             row = []
             for item in avail[i:i+3]:
                 display_text = str(item).upper() if f_type == 'qual' else (f"ꜱ{int(item):02d}" if f_type == 'season' else (f"ᴇ{int(item):02d}" if f_type == 'episode' else str(item).title()))
+                
+                if state['locks'].get(f_type) == item:
+                    display_text = f"🔘 {display_text}"
+                    
                 row.append(InlineKeyboardButton(text=display_text, callback_data=f"apply#{f_type}#{item}#{key}"))
             btn.append(row)
         
-        if f_type == 'lang':
-            btn.append([InlineKeyboardButton("✖️ ᴀɴʏ ʟᴀɴɢ", callback_data=f"clear#lang#{key}")])
-        elif f_type == 'qual':
-            btn.append([InlineKeyboardButton("✖️ ᴀɴʏ ǫᴜᴀʟ", callback_data=f"clear#qual#{key}")])
+        if f_type == 'lang': btn.append([InlineKeyboardButton("✖️ ᴀɴʏ ʟᴀɴɢᴜᴀɢᴇ", callback_data=f"clear#lang#{key}")])
+        elif f_type == 'qual': btn.append([InlineKeyboardButton("✖️ ᴀɴʏ ǫᴜᴀʟɪᴛʏ", callback_data=f"clear#qual#{key}")])
+        elif f_type == 'year': btn.append([InlineKeyboardButton("✖️ ᴀɴʏ ʏᴇᴀʀ", callback_data=f"clear#year#{key}")])
+        elif f_type == 'season': btn.append([InlineKeyboardButton("✖️ ᴀʟʟ ꜱᴇᴀꜱᴏɴꜱ", callback_data=f"clear#season#{key}")])
+        elif f_type == 'episode': btn.append([InlineKeyboardButton("✖️ ᴀʟʟ ᴇᴘɪꜱᴏᴅᴇꜱ", callback_data=f"clear#episode#{key}")])
             
         btn.append([InlineKeyboardButton("⪻ ʙᴀᴄᴋ", callback_data=f"next_0_{key}_{state.get('offset', 0)}")])
         await query.message.edit_text(f"<b>🪄 ꜱᴇʟᴇᴄᴛ ꜰɪʟᴛᴇʀ ꜰᴏʀ {f_type.upper()}:</b>", reply_markup=InlineKeyboardMarkup(btn))
@@ -401,17 +418,74 @@ async def universal_filter_router(client, query):
         if f_type == "season": state['locks']['episode'] = None 
         
     state['offset'] = 0 
-    await query.answer("ꜰɪʟᴛᴇʀ ᴀᴘᴘʟɪᴇᴅ! ✅")
     
     msg = query.message.reply_to_message
     if not msg: msg = query.message
     await auto_filter(client, msg, query.message, spoll_state=state)
+
+async def advantage_spell_chok(message, s):
+    search = message.text
+    google_search = search.replace(" ", "+")
+    first_letter = search[0].lower() if search else "a"
+    url = f"https://sg.media-imdb.com/suggests/{first_letter}/{google_search}.json"
+    
+    btn = [[
+        InlineKeyboardButton("⚠️ ɪɴꜱᴛʀᴜᴄᴛɪᴏɴꜱ ⚠️", callback_data='instructions'),
+        InlineKeyboardButton("🔎 ꜱᴇᴀʀᴄʜ ɢᴏᴏɢʟᴇ 🔍", url=f"https://www.google.com/search?q={google_search}")
+    ],[
+        InlineKeyboardButton("👨‍💻 ʀᴇǫᴜᴇꜱᴛ ᴛᴏ ʙᴏᴛ ᴀᴅᴍɪɴ", url="https://t.me/mpbotzsupport_bot")
+    ]]
+    
+    movies = []
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as resp:
+                data = await resp.text()
+                json_data = json.loads(data[data.find("(")+1 : data.rfind(")")])
+                for item in json_data.get("d", []):
+                    if "q" in item and "l" in item and "id" in item:
+                        if item["q"] in ["feature", "TV series", "video", "TV mini-series"]:
+                            movies.append({
+                                'title': item['l'],
+                                'year': item.get('y', ''),
+                                'movieID': item['id'].replace('tt', '')
+                            })
+                            if len(movies) >= 5: break
+    except Exception as e:
+        print(f"IMDb Error: {e}")
+
+    if not movies:
+        try:
+            n = await s.edit_text(text=script.NOT_FILE_TXT.format(message.from_user.mention, search), reply_markup=InlineKeyboardMarkup(btn))
+            await asyncio.sleep(60)
+            await n.delete()
+        except: pass
+        try: await message.delete()
+        except: pass
+        return
+
+    user = message.from_user.id if message.from_user else 0
+    buttons = []
+    for movie in movies:
+        title_text = f"{movie['title']} ({movie['year']})" if movie['year'] else movie['title']
+        buttons.append([InlineKeyboardButton(text=title_text.upper(), callback_data=f"spolling#{movie['movieID']}#{user}")])
+    buttons.append([InlineKeyboardButton("🚫 ᴄʟᴏꜱᴇ 🚫", callback_data="close_data")])
+    
+    try:
+        s = await s.edit_text(text=f"👋 ʜᴇʟʟᴏ {message.from_user.mention},\n\nɪ ᴄᴏᴜʟᴅɴ'ᴛ ꜰɪɴᴅ ᴛʜᴇ <b>'{search}'</b> ʏᴏᴜ ʀᴇǫᴜᴇꜱᴛᴇᴅ.\nꜱᴇʟᴇᴄᴛ ɪꜰ ʏᴏᴜ ᴍᴇᴀɴᴛ ᴏɴᴇ ᴏꜰ ᴛʜᴇꜱᴇ? 👇", reply_markup=InlineKeyboardMarkup(buttons))
+    except: pass
+    await asyncio.sleep(300)
+    try: await s.delete()
+    except: pass
+    try: await message.delete()
+    except: pass
 
 @Client.on_callback_query(filters.regex(r"^spolling"))
 async def advantage_spoll_choker(bot, query):
     _, id, user = query.data.split('#')
     if int(user) != 0 and query.from_user.id != int(user):
         return await query.answer(f"ʜᴇʟʟᴏ {query.from_user.first_name},\nᴅᴏɴ'ᴛ ᴄʟɪᴄᴋ ᴏᴛʜᴇʀ ʀᴇꜱᴜʟᴛꜱ!", show_alert=True)
+    
     movie = await get_poster(id, id=True)
     search = movie.get('title')
     s = await query.message.edit_text(f"<b><i>🔍 ᴄʜᴇᴄᴋɪɴɢ '<code>{search}</code>' ɪɴ ᴅᴀᴛᴀʙᴀꜱᴇ...</i></b>")
@@ -420,11 +494,11 @@ async def advantage_spoll_choker(bot, query):
     msg = query.message.reply_to_message
     if not msg: msg = query.message
     
-    # Passing to router properly
-    clean_search, locks = smart_query_parser(search)
+    clean_search, locks, hard_locks = smart_query_parser(search)
     state = {
         'query': clean_search, 
         'locks': locks, 
+        'hard_locks': hard_locks, 
         'offset': 0,
         'req': int(user),
         'key': f"{msg.chat.id}-{msg.id}"
@@ -445,7 +519,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         try: await query.message.reply_to_message.delete()
         except: pass
   
-    if query.data.startswith("file"):
+    elif query.data.startswith("file"):
         ident, file_id = query.data.split("#")
         try: user = query.message.reply_to_message.from_user.id
         except: user = query.message.from_user.id
@@ -549,7 +623,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
     elif query.data == "stats":
         if query.from_user.id not in ADMINS:
             return await query.answer("ᴀᴅᴍɪɴꜱ ᴏɴʟʏ! ⚠️", show_alert=True)
-        files = await Media.count_documents({}) # Handled the empty dictionary issue here too
+        files = await Media.count_documents({}) 
         users = await db.total_users_count()
         chats = await db.total_chat_count()
         premium = await db.all_premium_users()
@@ -627,7 +701,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             await query.message.edit_text("ꜱᴏᴍᴇᴛʜɪɴɢ ᴡᴇɴᴛ ᴡʀᴏɴɢ! ⚠️")
             
     elif query.data == "delete_all":
-        files = await Media.count_documents({}) # Empty filter fix applied
+        files = await Media.count_documents({})
         await query.answer('ᴅᴇʟᴇᴛɪɴɢ...')
         await Media.collection.drop()
         await query.message.edit_text(f"ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ {files} ꜰɪʟᴇꜱ ✅")
@@ -719,45 +793,3 @@ async def cb_handler(client: Client, query: CallbackQuery):
         btn = [[InlineKeyboardButton("🧾 ꜱᴇɴᴅ ᴘᴀʏᴍᴇɴᴛ ʀᴇᴄᴇɪᴘᴛ 🧾", url=OWNER_USERNAME)],[InlineKeyboardButton("🚫 ᴄʟᴏꜱᴇ 🚫", callback_data="close_data")]]
         await query.message.edit_media(InputMediaPhoto(media=PAYMENT_QR, caption=script.PREMIUM_PLAN_TEXT.format(OWNER_UPI_ID)))
         await query.message.edit_reply_markup(reply_markup=InlineKeyboardMarkup(btn))
-
-async def advantage_spell_chok(message, s):
-    search = message.text
-    google_search = search.replace(" ", "+")
-    btn = [[
-        InlineKeyboardButton("⚠️ ɪɴꜱᴛʀᴜᴄᴛɪᴏɴꜱ ⚠️", callback_data='instructions'),
-        InlineKeyboardButton("🔎 ꜱᴇᴀʀᴄʜ ɢᴏᴏɢʟᴇ 🔍", url=f"https://www.google.com/search?q={google_search}")
-    ],[
-        InlineKeyboardButton("👨‍💻 ʀᴇǫᴜᴇꜱᴛ ᴛᴏ ʙᴏᴛ ᴀᴅᴍɪɴ", url="https/t.me/mpbotzsupport_bot")
-    ]]
-    try:
-        movies = await get_poster(search, bulk=True)
-    except:
-        try:
-            n = await s.edit_text(text=script.NOT_FILE_TXT.format(message.from_user.mention, search), reply_markup=InlineKeyboardMarkup(btn))
-            await asyncio.sleep(60)
-            await n.delete()
-        except: pass
-        try: await message.delete()
-        except: pass
-        return
-    if not movies:
-        try:
-            n = await s.edit_text(text=script.NOT_FILE_TXT.format(message.from_user.mention, search), reply_markup=InlineKeyboardMarkup(btn))
-            await asyncio.sleep(60)
-            await n.delete()
-        except: pass
-        try: await message.delete()
-        except: pass
-        return
-    user = message.from_user.id if message.from_user else 0
-    buttons = [[InlineKeyboardButton(text=movie.get('title').upper(), callback_data=f"spolling#{movie.movieID}#{user}")] for movie in movies]
-    buttons.append([InlineKeyboardButton("🚫 ᴄʟᴏꜱᴇ 🚫", callback_data="close_data")])
-    try:
-        s = await s.edit_text(text=f"👋 ʜᴇʟʟᴏ {message.from_user.mention},\n\nɪ ᴄᴏᴜʟᴅɴ'ᴛ ꜰɪɴᴅ ᴛʜᴇ <b>'{search}'</b> ʏᴏᴜ ʀᴇǫᴜᴇꜱᴛᴇᴅ.\nꜱᴇʟᴇᴄᴛ ɪꜰ ʏᴏᴜ ᴍᴇᴀɴᴛ ᴏɴᴇ ᴏꜰ ᴛʜᴇꜱᴇ? 👇", reply_markup=InlineKeyboardMarkup(buttons))
-    except:
-        pass
-    await asyncio.sleep(300)
-    try: await s.delete()
-    except: pass
-    try: await message.delete()
-    except: pass
