@@ -3,6 +3,7 @@ import re
 import json
 import base64
 import sys
+import pytz
 from shortzy import Shortzy
 import random, string
 import asyncio
@@ -98,15 +99,23 @@ async def start(client, message):
             ]]
             reply_markup = InlineKeyboardMarkup(btn)
         await message.reply(
-          f"✅ <b>ᴠᴇʀɪꜰɪᴄᴀᴛɪᴏɴ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟ</b>\n"
-          f"━━━━━━━━━━━━━━━━━━\n\n"
-          f"🔓 <b>ʙᴏᴛ ᴀᴄᴄᴇꜱꜱ ᴜɴʟᴏᴄᴋᴇᴅ</b>\n"
-          f"⏳ <b>ᴠᴀʟɪᴅ ꜰᴏʀ:</b> <code>{get_readable_time(VERIFY_EXPIRE)}</code>",
-          reply_markup=reply_markup,
-          protect_content=True
+            "✅ <b>ᴠᴇʀɪꜰɪᴄᴀᴛɪᴏɴ sᴜᴄᴄᴇssғᴜʟ</b>\n"
+            "<b>━━━━━━━━━━━━━━━━━━━━━━━━━━━━</b>\n\n"
+            "🔓 <b>ᴀᴄᴄᴇss ɢʀᴀɴᴛᴇᴅ</b>\n"
+            "ʏᴏᴜʀ ᴀᴄᴄᴏᴜɴᴛ ʜᴀs ʙᴇᴇɴ ᴠᴇʀɪꜰɪᴇᴅ sᴜᴄᴄᴇssғᴜʟʟʏ.\n"
+            "ᴀʟʟ ᴘʀᴇᴍɪᴜᴍ sᴇʀᴠɪᴄᴇs ᴀʀᴇ ɴᴏᴡ <b>ᴜɴʟᴏᴄᴋᴇᴅ</b>.\n\n"
+            "⏱️ <b>sᴇssɪᴏɴ ᴇxᴘɪʀʏ:</b>\n"
+            f"└ <code>{get_readable_time(VERIFY_EXPIRE)}</code>\n\n"
+            "✨ <b>ᴡʜᴀᴛ's ɴᴇᴡ?</b>\n"
+            "• ғᴀsᴛ sᴇᴀʀᴄʜ ᴇɴᴀʙʟᴇᴅ\n"
+            "• ᴅɪʀᴇᴄᴛ ғɪʟᴇ sᴛʀᴇᴀᴍɪɴɢ\n"
+            "• ɴᴏ ᴍᴏʀᴇ ɪɴᴛᴇʀʀᴜᴘᴛɪᴏɴs\n\n"
+            "🚀 <i>ᴇɴᴊᴏʏ ʏᴏᴜʀ ᴘʀᴇᴍɪᴜᴍ ᴇxᴘᴇʀɪᴇɴᴄᴇ!</i>\n"
+            "<b>━━━━━━━━━━━━━━━━━━━━━━━━━━━━</b>",
+            reply_markup=reply_markup,
+            protect_content=True
         )
-       try:
-            import pytz
+        try:
             tz = pytz.timezone('Asia/Kolkata')
             current_time = datetime.datetime.now(tz).strftime("%I:%M %p - %d %b %Y")
             
@@ -137,14 +146,21 @@ async def start(client, message):
                 InlineKeyboardButton("🗳 ᴛᴜᴛᴏʀɪᴀʟ 🗳", url=VERIFY_TUTORIAL)
             ]]
             await message.reply(
-              "🔐 <b>ᴠᴇʀɪꜰɪᴄᴀᴛɪᴏɴ ʀᴇǫᴜɪʀᴇᴅ</b>\n"
-              "━━━━━━━━━━━━━━━━━━\n\n"
-              "📌 <b>ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴠᴇʀɪꜰɪᴇᴅ ᴛᴏᴅᴀʏ</b>\n"
-              "ᴘʟᴇᴀꜱᴇ ᴄᴏᴍᴘʟᴇᴛᴇ ᴠᴇʀɪꜰɪᴄᴀᴛɪᴏɴ\n"
-              "ᴛᴏ ᴄᴏɴᴛɪɴᴜᴇ ᴜꜱɪɴɢ ᴛʜᴇ ʙᴏᴛ.\n\n"
-              "👇 <b>ᴛᴀᴘ ᴛʜᴇ ʙᴜᴛᴛᴏɴ ʙᴇʟᴏᴡ</b>",
-              reply_markup=InlineKeyboardMarkup(btn),
-              protect_content=True
+                "⚠️ <b>ᴀᴄᴛɪᴠᴀᴛɪᴏɴ ʀᴇǫᴜɪʀᴇᴅ</b>\n"
+                "<b>— — — — — — — — — — — — — — —</b>\n\n"
+                "ʏᴏᴜʀ ᴄᴜʀʀᴇɴᴛ sᴇssɪᴏɴ ɪs <b>ɪɴᴀᴄᴛɪᴠᴇ</b>. ᴘʟᴇᴀsᴇ ʀᴇ-ᴠᴇʀɪꜰʏ \n"
+                "ʏᴏᴜʀ ᴀᴄᴄᴏᴜɴᴛ ᴛᴏ ᴄᴏɴᴛɪɴᴜᴇ ᴜsɪɴɢ ᴏᴜʀ sᴇʀᴠɪᴄᴇs.\n\n"
+                "✨ <b>ᴡʜʏ ᴠᴇʀɪꜰʏ?</b>\n"
+                "• ᴜɴʟɪᴍɪᴛᴇᴅ ʜɪɢʜ-sᴘᴇᴇᴅ ᴅᴏᴡɴʟᴏᴀᴅs\n"
+                "• ɪɴsᴛᴀɴᴛ ᴀᴄᴄᴇss ᴛᴏ ᴘʀᴇᴍɪᴜᴍ ғɪʟᴇs\n\n"
+                "🚀 <b>sᴛᴇᴘs ᴛᴏ ᴜɴʟᴏᴄᴋ:</b>\n"
+                "𝟷. ᴄʟɪᴄᴋ 'ᴠᴇʀɪꜰʏ ɴᴏᴡ' ʙᴇʟᴏᴡ\n"
+                "𝟸. ᴄᴏᴍᴘʟᴇᴛᴇ ᴛʜᴇ sʜᴏʀᴛ sᴇᴄᴜʀɪᴛʏ ᴄʜᴇᴄᴋ\n"
+                "𝟹. ᴇɴᴊᴏʏ ʏᴏᴜʀ ᴄᴏɴᴛᴇɴᴛ ɪɴsᴛᴀɴᴛʟʏ!\n\n"
+                "📢 <i>ɴᴏᴛᴇ: ᴠᴇʀɪꜰɪᴄᴀᴛɪᴏɴ ᴇxᴘɪʀᴇs ᴇᴠᴇʀʏ 𝟸𝟺 ʜᴏᴜʀs.</i>\n"
+                "<b>— — — — — — — — — — — — — — —</b>",
+                reply_markup=InlineKeyboardMarkup(btn),
+                protect_content=True
             )
             return
             
