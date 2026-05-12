@@ -493,9 +493,20 @@ async def advantage_spoll_choker(bot, query):
     _, id, user = query.data.split('#')
     if int(user) != 0 and query.from_user.id != int(user):
         return await query.answer(f"ʜᴇʟʟᴏ {query.from_user.first_name},\nᴅᴏɴ'ᴛ ᴄʟɪᴄᴋ ᴏᴛʜᴇʀ ʀᴇꜱᴜʟᴛꜱ!", show_alert=True)
+    search = None
+    for row in query.message.reply_markup.inline_keyboard:
+        for btn in row:
+            if btn.callback_data == query.data:
+                search = btn.text
+                break
+        if search:
+            break
+            
+    if not search:
+        return await query.answer("⚠️ ꜱᴏᴍᴇᴛʜɪɴɢ ᴡᴇɴᴛ ᴡʀᴏɴɢ!", show_alert=True)
+
+    search = search.replace("(", "").replace(")", "")
     
-    movie = await get_poster(id, id=True)
-    search = movie.get('title')
     s = await query.message.edit_text(f"<b><i>🔍 ᴄʜᴇᴄᴋɪɴɢ '<code>{search}</code>' ɪɴ ᴅᴀᴛᴀʙᴀꜱᴇ...</i></b>")
     await query.answer('')
     
